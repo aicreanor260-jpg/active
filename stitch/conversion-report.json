@@ -1,0 +1,22 @@
+[
+  {
+    "source": "Глава 8. Транспортный уровень(лекция).pdf",
+    "output": "01-lecture.md",
+    "units": 17,
+    "text_characters": 26482,
+    "empty_units": []
+  },
+  {
+    "source": "Глава 8. Транспортный уровень.pdf",
+    "output": "02-handout.md",
+    "units": 25,
+    "text_characters": 10557,
+    "empty_units": []
+  },
+  {
+    "source": "PPTX",
+    "output": "03-presentation.md",
+    "units": 29,
+    "images": 20
+  }
+]
