@@ -1,0 +1,960 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Основы Linux</title><style>
+:root{
+  --glass:rgba(255,255,255,.13);--glass2:rgba(255,255,255,.2);--edge:rgba(255,255,255,.30);
+  --ink:#fff;--dim:rgba(255,255,255,.76);--mint:#5ddcb0;--sky:#6fb2ff;--pink:#f07ab4;--lilac:#c9a6ff;
+  --deep:#3b2fa8;
+  --f:"Golos Text","Inter","Manrope","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono","Cascadia Mono","Consolas","Roboto Mono",ui-monospace,monospace;
+  --r:18px;--hl:inset 0 1px 0 rgba(255,255,255,.28);--sh:0 10px 30px rgba(40,20,120,.18);
+  --ez:cubic-bezier(.22,.7,.3,1);--sp:1;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:clamp(14px,min(1.02vw,1.86vh),28px)}
+html,body{height:100%;overflow:hidden;color:var(--ink);font-family:var(--f)}
+body{background:linear-gradient(180deg,rgba(28,18,78,.55),rgba(40,24,96,.42) 55%,rgba(28,18,78,.6)),url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNjAwIiBoZWlnaHQ9IjkwMCIgdmlld0JveD0iMCAwIDE2MDAgOTAwIj48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9ImIxIiBjeD0iMTQlIiBjeT0iMTAlIiByPSI2MiUiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzdkNWNmMiIgc3RvcC1vcGFjaXR5PSIuOTUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM3ZDVjZjIiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJiMiIgY3g9Ijg4JSIgY3k9IjE2JSIgcj0iNTUlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM0YjdkZTgiIHN0b3Atb3BhY2l0eT0iLjg1Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjNGI3ZGU4IiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PjxyYWRpYWxHcmFkaWVudCBpZD0iYjMiIGN4PSI3NCUiIGN5PSI5NCUiIHI9IjYwJSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYTQ0YmQ4IiBzdG9wLW9wYWNpdHk9Ii44Ii8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjYTQ0YmQ4IiBzdG9wLW9wYWNpdHk9IjAiLz48L3JhZGlhbEdyYWRpZW50PjxyYWRpYWxHcmFkaWVudCBpZD0iYjQiIGN4PSI2JSIgY3k9Ijg2JSIgcj0iNTIlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMyZmFlOTUiIHN0b3Atb3BhY2l0eT0iLjciLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMyZmFlOTUiIHN0b3Atb3BhY2l0eT0iMCIvPjwvcmFkaWFsR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSIxNjAwIiBoZWlnaHQ9IjkwMCIgZmlsbD0iIzNiMmZhOCIvPjxyZWN0IHdpZHRoPSIxNjAwIiBoZWlnaHQ9IjkwMCIgZmlsbD0idXJsKCNiMSkiLz48cmVjdCB3aWR0aD0iMTYwMCIgaGVpZ2h0PSI5MDAiIGZpbGw9InVybCgjYjIpIi8+PHJlY3Qgd2lkdGg9IjE2MDAiIGhlaWdodD0iOTAwIiBmaWxsPSJ1cmwoI2IzKSIvPjxyZWN0IHdpZHRoPSIxNjAwIiBoZWlnaHQ9IjkwMCIgZmlsbD0idXJsKCNiNCkiLz48L3N2Zz4=) center/cover no-repeat;background-color:#3f358f;background-attachment:fixed}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+b{font-weight:700}
+#prog{position:fixed;left:0;top:0;height:4px;width:100%;z-index:30;background:rgba(255,255,255,.18)}
+#prog i{display:block;height:100%;width:0;background:var(--mint);transition:width .3s var(--ez)}
+.slide{position:fixed;inset:0;z-index:1;display:none}
+.slide.on{display:block}
+.sc{height:100%;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;
+  padding:clamp(18px,5vh,64px) clamp(16px,5vw,110px) calc(5.4rem + 12px);scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.4) transparent}
+.tight .sc{padding-top:clamp(14px,3vh,36px)}
+.wrap{margin:auto;width:100%;max-width:100rem}
+.sh{margin-bottom:1.4rem}
+.tight .sh{margin-bottom:.7rem}
+.kick{font-size:.8rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:.4rem}
+h2{font-size:2.4rem;line-height:1.08;font-weight:800;color:var(--ink);letter-spacing:-.01em;max-width:40ch}
+.tight h2{font-size:1.9rem}
+h3{font-size:1.1rem;font-weight:700;margin-bottom:.6rem;line-height:1.3}
+.p{font-size:1.2rem;line-height:1.5;margin-bottom:1rem;max-width:62ch;color:var(--ink)}
+.p.sm{font-size:1.04rem;margin-bottom:.75rem}
+.p.wide{max-width:none;margin-bottom:1.2rem}
+sup{font-size:.65em}
+.two{display:grid;grid-template-columns:minmax(0,1fr);gap:1.4rem 2.6rem;align-items:center}
+.g2{display:grid;grid-template-columns:minmax(0,1fr);gap:1rem}
+.g3{display:grid;grid-template-columns:minmax(0,1fr);gap:1rem}
+.vstack{display:flex;flex-direction:column;gap:1rem}
+.card{background:var(--glass);border:1px solid var(--edge);border-radius:var(--r);box-shadow:var(--hl),var(--sh);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);backdrop-filter:blur(16px) saturate(140%)}
+.dgcard{padding:1rem 1.2rem}
+.dg{display:block;width:100%;height:auto;max-height:64vh;overflow:visible}
+.wide2 .dg{max-height:52vh}
+.callout{background:var(--glass2);border-radius:var(--r);padding:.9rem 1.1rem}
+.cM{color:var(--mint)}.cP{color:var(--pink)}.cS{color:var(--sky);fill:var(--sky)}.cC{color:var(--mint);fill:var(--mint)}.dimt{color:var(--dim)}
+.c-mint{--c:var(--mint)}.c-sky{--c:var(--sky)}.c-pink{--c:var(--pink)}.c-lilac{--c:var(--lilac)}.c-dim{--c:var(--dim)}
+/* steps */
+.steps{list-style:none;display:flex;flex-direction:column;gap:1rem}
+.steps li{display:flex;gap:1rem;align-items:flex-start;font-size:1.2rem;line-height:1.45}
+.steps.big li{font-size:1.65rem;align-items:center}
+.badge{flex:none;display:grid;place-items:center;width:2.1em;height:2.1em;border-radius:10px;color:var(--deep);font-weight:800;font-family:var(--mono);font-size:.85em;background:#fff}
+.fc{padding:1.2rem 1.35rem}.fc p{font-size:1.02rem;line-height:1.5}
+.ftag{font-weight:800;font-size:1.35rem;color:var(--c);margin-bottom:.45rem}
+/* reveal engine */
+[data-s]{opacity:0;transform:translateY(10px);
+  transition:opacity calc(280ms / var(--sp)) var(--ez) calc(var(--dl,0ms) / var(--sp)),transform calc(280ms / var(--sp)) var(--ez) calc(var(--dl,0ms) / var(--sp))}
+[data-s].in{opacity:1;transform:none}
+tr[data-s]{transform:none}
+svg [data-s]{transform:none}
+.arr[data-s]{opacity:1}
+.arr .draw{fill:none;stroke:var(--c);stroke-width:4;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset calc(700ms / var(--sp)) linear calc(var(--dl,0ms) / var(--sp))}
+.arr.in .draw{stroke-dashoffset:0}
+.an{transition:transform calc(var(--md,1000ms) / var(--sp)) cubic-bezier(.45,.05,.35,1) calc(var(--dl,0ms) / var(--sp)),opacity calc(280ms / var(--sp)) var(--ez)}
+.dr{fill:none;stroke:var(--mint);stroke-width:4;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset calc(700ms / var(--sp)) linear}
+.dr.on{stroke-dashoffset:0}
+.ni,.ni *{transition:none!important}
+.flash{animation:fl calc(700ms / var(--sp)) var(--ez) 1}
+@keyframes fl{0%{background:rgba(93,220,176,.55)}100%{background:transparent}}
+.pulse{animation:pl calc(700ms / var(--sp)) var(--ez) 1}
+@keyframes pl{0%,100%{background:transparent}40%{background:rgba(111,178,255,.45)}}
+.gone{transition:opacity calc(280ms / var(--sp)) var(--ez),max-height calc(500ms / var(--sp)) var(--ez) calc(200ms / var(--sp)),padding calc(500ms / var(--sp)) var(--ez) calc(200ms / var(--sp)),margin calc(500ms / var(--sp)) var(--ez) calc(200ms / var(--sp)),border-width 0s linear calc(700ms / var(--sp))}
+.gone.pulse{animation:none;border-color:var(--pink);background:rgba(240,122,180,.3)}
+.chipf.kl{opacity:0;max-height:0;padding-top:0;padding-bottom:0;margin-top:-.45rem;border-width:0}
+/* svg primitives */
+.dg text{font-family:var(--f);font-size:22px;fill:var(--ink)}
+.dg .nl{font-size:20px;font-weight:700}
+.row{stroke:rgba(255,255,255,.3);stroke-width:2;stroke-dasharray:6 8}
+.dg .rowt{fill:var(--dim);font-size:18px}
+.bx{stroke:rgba(255,255,255,.55);stroke-width:1.5}
+.bx.sky{fill:rgba(111,178,255,.55)}.bx.mint{fill:rgba(93,220,176,.5)}.bx.pink{fill:rgba(240,122,180,.6)}
+.bx.fr{fill:rgba(255,196,110,.62)}.bx.glass{fill:rgba(255,255,255,.14)}
+.dg .bxt{font-weight:700;font-size:21px}
+.dg .cap,.dg .capm{font-size:22px;font-weight:600}
+.dg .capm{fill:var(--mint);font-family:var(--mono)}
+.bub{fill:rgba(255,255,255,.16);stroke:var(--edge);stroke-width:1.5}
+.dg .bubt{font-size:19px}
+.lane{stroke:rgba(255,255,255,.28);stroke-width:2;stroke-dasharray:4 8}
+.lnk{stroke:rgba(255,255,255,.55);stroke-width:4}
+.pk-m{fill:var(--mint);stroke:#fff;stroke-width:1.5}.pk-p{fill:var(--pink);stroke:#fff;stroke-width:1.5}.pk-s{fill:var(--sky);stroke:#fff;stroke-width:1.5}
+.dg .pkt{fill:#1d1760;font-weight:800;font-family:var(--mono);font-size:19px}
+.dg .pkt.sm{font-size:16px}
+.dg .pkt.hit{fill:#1d1760;animation:tf calc(700ms / var(--sp)) var(--ez) 1}
+@keyframes tf{0%{opacity:.2}100%{opacity:1}}
+.dg .pks2{fill:#1d1760;font-size:15px;font-family:var(--mono)}
+.dg .cloudt{fill:#4b4fd8;font-size:34px;font-weight:800}
+.dg .flg{fill:var(--ink);font-family:var(--mono);font-size:15px;font-weight:700}
+.xm{stroke:var(--pink);stroke-width:6;stroke-linecap:round;fill:none}
+.dg .lost{fill:var(--pink);font-weight:700;font-size:19px}
+.pipe{fill:rgba(255,255,255,.12);stroke:var(--edge);stroke-width:1.5}
+.dg .pipet{fill:var(--dim);font-size:19px}
+.dg .nh{font-family:var(--mono);font-size:16px;font-weight:700;fill:#1d1760}
+.ifb{fill:rgba(255,255,255,.2);stroke:var(--edge)}
+.dg .ift{font-size:15px;font-weight:700;font-family:var(--mono)}
+.dg .adr{font-family:var(--mono);font-size:14px;fill:var(--ink)}
+.dg .adr.dim{fill:var(--dim)}
+.sn{fill:rgba(93,220,176,.3);stroke:var(--mint)}.sn.lan{fill:rgba(240,122,180,.25);stroke:var(--pink)}
+.dg .snt{font-family:var(--mono);font-size:15px;font-weight:700}
+.rtb{fill:rgba(30,20,110,.35);stroke:var(--edge)}
+.dg .rth{font-family:var(--mono);font-size:14px;fill:var(--dim)}
+.dg .rtr{font-family:var(--mono);font-size:14px}
+.rhit{fill:rgba(93,220,176,.35);stroke:var(--mint)}
+.dom{fill:none;stroke:var(--pink);stroke-width:2.5;stroke-dasharray:10 8}
+.dg .domt{fill:var(--pink);font-size:17px;font-weight:600}
+.dg .frm{font-family:var(--mono);font-size:18px}
+.dg .cM{fill:var(--mint)}
+.ico{width:100%;height:4.2rem;margin-bottom:.6rem}
+.sig{fill:none;stroke:var(--mint);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.dot{fill:var(--sky)}
+.media{padding:1.3rem}.media p{font-size:1.05rem;line-height:1.5;color:var(--dim)}
+/* title */
+.tslide .sc{padding-left:clamp(16px,10vw,220px)}
+.title h1{font-size:clamp(2.4rem,6.5vw,5.6rem);line-height:1;font-weight:800;letter-spacing:-.02em;max-width:14ch;margin:.3rem 0 1.4rem}
+.kick.big{font-size:1rem}
+.lead{font-size:1.45rem;line-height:1.45;color:var(--dim);max-width:44ch;margin-bottom:2rem}
+.tchips{display:flex;flex-wrap:wrap;gap:.7rem;margin-bottom:3rem}
+.chip{border:1px solid var(--edge);background:var(--glass);border-radius:var(--r);padding:.5rem .95rem;font-weight:700;font-size:1.1rem;box-shadow:var(--hl)}
+.authors{font-size:1.05rem;line-height:1.6}
+/* tables */
+.tw{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:1.02rem}
+.tbl th,.tbl td{text-align:left;padding:.55rem 1rem;border-bottom:1px solid rgba(255,255,255,.2);vertical-align:top}
+.tbl thead th{background:rgba(255,255,255,.16);font-weight:700}
+.tbl tbody th{font-weight:600}
+.tbl td.mono{color:var(--mint);white-space:nowrap}
+.ipt{font-size:1.2rem}.ipt td{color:var(--ink)}.ipt td.c4{color:var(--pink)}
+/* header grid */
+.hdrcard{padding:1.2rem 1.4rem}
+.ruler{display:flex;justify-content:space-between;color:var(--dim);font-size:.8rem;margin-bottom:.3rem}
+.hdr{display:flex;flex-direction:column;gap:.4rem}
+.hrow{display:grid;grid-template-columns:repeat(32,minmax(0,1fr));gap:.4rem}
+.fld{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:.1rem;
+  min-height:3.3rem;padding:.35rem;border:1.5px solid var(--c);border-radius:12px;background:rgba(255,255,255,.1);cursor:help;outline:none;transition:background .15s}
+.fld.sky{--c:var(--sky)}.fld.lilac{--c:var(--lilac)}.fld.pink{--c:var(--pink)}.fld.mint{--c:var(--mint)}.fld.dim{--c:rgba(255,255,255,.4);border-style:dashed}
+.fld b{font-size:.98rem;line-height:1.15}.fld .mono{font-size:.75rem;color:var(--dim)}
+.fld:hover,.fld:focus-visible{background:rgba(255,255,255,.26);z-index:5}
+.tip{position:absolute;left:50%;bottom:calc(100% + 10px);transform:translate(-50%,4px);width:min(24rem,80vw);background:#2d2490;border:1px solid var(--edge);color:#fff;
+  font-size:.95rem;line-height:1.4;text-align:left;padding:.7rem .9rem;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .15s,transform .15s}
+.fld:hover .tip,.fld:focus-visible .tip{opacity:1;transform:translate(-50%,0)}
+.hrow:first-child .tip{bottom:auto;top:calc(100% + 10px)}
+/* ipv6 compare */
+.col46{padding:1rem 1.1rem;display:flex;flex-direction:column;gap:.45rem;align-self:start}
+.chipf{max-height:3rem;overflow:hidden;padding:.42rem .8rem;border-radius:10px;border:1.5px solid rgba(255,255,255,.35);background:rgba(255,255,255,.1);font-size:.98rem;font-weight:600}
+.chipf.sky{border-color:var(--sky)}.chipf.lilac{border-color:var(--lilac)}.chipf.mint{border-color:var(--mint)}.chipf.pink{border-color:var(--pink)}
+/* terminal */
+.term{padding:1rem 1.2rem;font-size:1rem;line-height:1.7;background:rgba(30,20,110,.35)}
+.rowp{border-radius:6px;padding:0 .3rem;margin:0 -.3rem}
+.dump{font-size:.88rem;align-self:start;word-break:break-all}
+/* path */
+.pathwrap{display:flex;flex-direction:column;gap:.7rem}
+.pathsvg{padding:.5rem .8rem}.pathsvg .dg{max-height:46vh}
+.pbar{display:grid;grid-template-columns:minmax(0,1fr);gap:.7rem}
+.pkp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;padding:.7rem 1rem}
+.pkh{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.kv{display:flex;justify-content:space-between;gap:.8rem;font-size:.95rem;padding:.18rem .3rem;border-bottom:1px solid rgba(255,255,255,.18);border-radius:4px}
+.kv span{color:var(--dim)}
+.pcap{display:flex;align-items:center;gap:1rem;justify-content:space-between;padding:.7rem 1rem}
+.pcap .btn{white-space:nowrap;flex:none}
+.pcap p{font-size:1.1rem;font-weight:600;line-height:1.35}
+.panels{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.6rem}
+.pnl{padding:.6rem .8rem;opacity:.5;transition:opacity .28s var(--ez),background .28s var(--ez),border-color .28s}
+.pnl b{font-size:.95rem}.pnl p{font-size:.82rem;line-height:1.35;color:var(--dim);margin-top:.2rem}
+.pnl.on{opacity:1;background:rgba(255,255,255,.24);border-color:var(--mint)}
+.ptext{padding:1rem 1.2rem}.ptext .p{max-width:none}
+.gw{padding:1.2rem;display:flex;flex-direction:column;gap:.7rem}
+.gwr{display:flex;flex-wrap:wrap;gap:.4rem 1rem;align-items:baseline;justify-content:space-between;padding:.7rem 1rem;border-radius:12px;background:rgba(255,255,255,.1);font-size:1.1rem}
+.gwr span{color:var(--dim)}.gwr.big{font-size:1.3rem;border:1.5px solid var(--pink)}.gwr.ok{border-color:var(--mint)}
+.term.big{font-size:1.35rem}
+.qas{display:flex;flex-direction:column;gap:.7rem}
+.qa{padding:.9rem 1.1rem;display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;justify-content:space-between}
+.qq{display:flex;gap:.8rem;align-items:center;flex:1 1 26rem;font-size:1.08rem}
+.qa-a{flex:1 1 100%;color:var(--mint);font-size:1.05rem;line-height:1.45}
+/* trainers */
+.lst{padding:1.3rem 1.5rem}
+.trn,.quiz{padding:1.4rem 1.5rem}
+.tq{font-size:1.3rem;line-height:1.4;margin-bottom:1rem}
+.trow{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;margin-bottom:.8rem}
+.trow input{font-size:1.3rem;width:8em;padding:.5rem .7rem;border:1.5px solid var(--edge);border-radius:12px;color:#fff;background:rgba(255,255,255,.14)}
+.trow input:focus-visible{outline:3px solid var(--mint);outline-offset:1px}
+.btn{font:inherit;font-size:.95rem;font-weight:600;padding:.55rem .95rem;border-radius:12px;border:1.5px solid var(--edge);background:rgba(255,255,255,.12);color:#fff;cursor:pointer;transition:background .15s,border-color .15s}
+.btn:hover{background:rgba(255,255,255,.24)}
+.btn:active{background:rgba(255,255,255,.32)}
+.btn.pri{background:#fff;border-color:#fff;color:var(--deep)}
+.btn.pri:hover{background:var(--mint);border-color:var(--mint)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn:focus-visible,.opt:focus-visible,#nav button:focus-visible,.ovi:focus-visible,.fld:focus-visible{outline:3px solid var(--mint);outline-offset:2px}
+.tres{min-height:2.6rem;font-size:1.08rem;line-height:1.45;margin-bottom:.6rem}
+.tres.ok{color:var(--mint)}.tres.no{color:var(--pink)}
+.tscore{color:var(--dim)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1rem}
+.opts.col{grid-template-columns:1fr}
+.opt{font:inherit;text-align:left;font-size:1.02rem;padding:.7rem 1rem;border-radius:12px;border:1.5px solid var(--edge);background:rgba(255,255,255,.1);color:#fff;cursor:pointer;word-break:break-word}
+.opt:hover{background:rgba(255,255,255,.22)}
+.opt.ok{border-color:var(--mint);background:rgba(93,220,176,.3)}.opt.no{border-color:var(--pink);background:rgba(240,122,180,.3)}
+.qtop{display:flex;justify-content:space-between;color:var(--dim);margin-bottom:.6rem}
+.quizrow{align-items:start}
+/* nav */
+#nav{position:fixed;z-index:40;left:50%;bottom:12px;transform:translateX(-50%);display:flex;align-items:center;gap:.3rem;flex-wrap:wrap;justify-content:center;
+  background:rgba(45,35,150,.5);-webkit-backdrop-filter:blur(16px) saturate(140%);backdrop-filter:blur(16px) saturate(140%);border:1px solid var(--edge);border-radius:var(--r);box-shadow:var(--hl),var(--sh);padding:.35rem .5rem;font-size:14px;max-width:calc(100vw - 24px)}
+#nav button{font:inherit;font-size:13px;font-weight:600;border:1px solid transparent;background:transparent;color:#fff;border-radius:10px;padding:.42rem .6rem;cursor:pointer;display:inline-flex;align-items:center;gap:.3rem}
+#nav button:hover{background:rgba(255,255,255,.18)}
+#nav button[aria-pressed="true"]{background:#fff;color:var(--deep)}
+#nav svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.nsep{width:1px;height:22px;background:var(--edge);margin:0 .2rem}
+#ind{font-family:var(--mono);font-size:13px;padding:0 .4rem;white-space:nowrap}
+#ind .st{color:var(--dim);margin-left:.6rem}
+.seg{display:inline-flex;border:1px solid var(--edge);border-radius:10px;padding:2px}
+#ov{position:fixed;inset:0;z-index:60;background:rgba(70,55,190,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);overflow:auto;padding:clamp(16px,5vh,60px) clamp(16px,6vw,120px)}
+#ov h2{margin-bottom:1.2rem;font-size:1.8rem}
+.ovg{display:grid;grid-template-columns:repeat(auto-fill,minmax(14rem,1fr));gap:.7rem}
+.ovi{font:inherit;text-align:left;display:flex;gap:.8rem;align-items:center;padding:.8rem 1rem;background:var(--glass);border:1px solid var(--edge);border-radius:14px;cursor:pointer;color:#fff;font-size:1rem}
+.ovi:hover{background:rgba(255,255,255,.24)}.ovi.cur{border-color:var(--mint);box-shadow:inset 0 0 0 1px var(--mint)}
+.ovi .mono{color:var(--mint);font-weight:700;width:2rem}
+@media (min-width:768px){.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.pbar{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}}
+@media (min-width:768px) and (max-width:1279px){.g3{grid-template-columns:repeat(2,minmax(0,1fr))}.panels{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:1280px){.two{grid-template-columns:repeat(2,minmax(0,1fr))}.two:has(> [data-scene]){grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr)}}
+@media (max-width:767px){
+  html{font-size:15px}
+  h2,.tight h2{font-size:min(1.8rem,30px)}
+  .sc{padding-bottom:10rem}
+  .steps.big li{font-size:1.3rem}
+  .hrow{gap:.2rem}.fld b{font-size:.62rem}.fld .mono{font-size:.55rem}.fld{min-height:2.8rem;padding:.2rem}
+  .opts{grid-template-columns:1fr}
+  .dg,.pathsvg .dg{max-height:none}
+  .panels{grid-template-columns:1fr 1fr}
+  .pkp{grid-template-columns:1fr}
+  .pcap{flex-direction:column;align-items:flex-start}
+  .tbl{min-width:40rem}
+  #nav{bottom:6px;font-size:12px;width:calc(100vw - 12px)}
+  #nav .lbl2{display:none}
+}
+.figs .wrap{max-width:none;width:100%}.figs .sh{margin-bottom:.4rem}.figs .sh h2{font-size:1.5rem}.figx{margin:0;display:flex;justify-content:center}.figx img{width:auto;max-width:100%;max-height:80vh;image-rendering:auto;height:auto;border-radius:16px;box-shadow:0 14px 44px rgba(10,6,40,.35)}
+.wsx{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:1.6rem;align-items:start}
+@media (max-width:900px){.wsx{grid-template-columns:1fr}}
+.wsk{background:#fff;color:#1b1d33;border-radius:14px;overflow:hidden;box-shadow:0 12px 36px rgba(10,6,40,.3);font-size:.8rem}
+.wsd{padding:.9em 1.1em;font-family:var(--mono);line-height:1.8;background:#fafbfe;overflow-x:auto}
+.wl{white-space:nowrap}.wl.i1{padding-left:1.4em}.wl.i2{padding-left:2.8em;color:#445}.wl.dim{color:#8a8fa8}
+.whl{background:#fff1a8;border-radius:5px;padding:.1em .35em}
+.wn{display:inline-grid;place-items:center;width:1.45em;height:1.45em;border-radius:50%;background:#e5383b;color:#fff;font:700 .8em/1 var(--f);margin-right:.45em;vertical-align:.1em}
+.wbad{background:#e5383b!important;color:#fff!important}
+.wsl li{font-size:.95rem!important;line-height:1.4}
+.slide.on .wsx [data-s],.wsx [data-s]{opacity:1;transform:none}
+.chr{position:absolute;bottom:3.2rem;width:clamp(120px,15vw,300px);height:auto;pointer-events:none;z-index:3;filter:drop-shadow(0 12px 24px rgba(10,6,40,.35));animation:bob 4s ease-in-out infinite}
+.chr-r{right:2.2rem}.chr-l{left:2.2rem}
+@keyframes bob{50%{transform:translateY(-10px)}}
+.ovg{grid-template-columns:repeat(auto-fill,minmax(17rem,1fr));gap:1rem}
+.ovi{flex-direction:column;align-items:stretch;gap:.45rem;padding:.5rem}
+.ovt{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:8px;border:1px solid rgba(255,255,255,.25);pointer-events:none;background:#3f358f}
+.ovt>.slide{position:absolute!important;inset:auto!important;left:0;top:0;display:block!important;transform-origin:0 0}
+.ovt [data-s]{opacity:1!important;transform:none!important}
+.ovi .ovn{display:flex;gap:.6rem;align-items:baseline;font-size:.95rem}
+.fld.off{opacity:.3;filter:saturate(.4)}
+.fld.big{min-height:6.4rem}
+.figh{max-width:92rem;margin:0 auto}.figh .fld{min-height:4.2rem}.figh .fld b{font-size:1.15rem}.figh .fld.big{min-height:7rem}
+.htot{text-align:center;margin-top:.9rem;font-size:1.05rem;opacity:.9}
+.flow{display:flex;flex-direction:column;align-items:center;gap:0;max-width:64rem;margin:0 auto}
+.fl-b{background:var(--glass);border:1px solid var(--edge);border-radius:16px;padding:1rem 1.6rem;text-align:center;font-size:1.25rem;line-height:1.45;box-shadow:var(--hl),var(--sh)}
+.fl-a{width:3px;height:2rem;background:rgba(255,255,255,.7);position:relative}
+.fl-a::after{content:"";position:absolute;left:50%;bottom:-2px;transform:translateX(-50%);border:8px solid transparent;border-top-color:rgba(255,255,255,.85)}
+.fl-d{width:15rem;height:15rem;display:grid;place-items:center;margin:1.2rem 0}
+.fl-d span{display:grid;place-items:center;width:10.6rem;height:10.6rem;transform:rotate(45deg);background:rgba(93,220,176,.28);border:2px solid var(--mint);border-radius:18px}
+.fl-d span{font-size:0;position:relative}
+.fl-d span::after{content:"IP-адреса в одной сети?";position:absolute;inset:0;display:grid;place-items:center;transform:rotate(-45deg);font-size:1.15rem;font-weight:700;text-align:center;padding:1.4rem}
+.fl-split{display:grid;grid-template-columns:1fr 1fr;gap:2.4rem;width:100%}
+.fl-br{display:flex;flex-direction:column;align-items:center;gap:.6rem}
+.fl-tag{font-weight:800;font-family:var(--mono);padding:.25rem .9rem;border-radius:999px}
+.fl-tag.ok{background:var(--mint);color:var(--deep)}.fl-tag.no{background:var(--pink);color:#fff}
+.fl-b.ok{border-color:var(--mint)}.fl-b.no{border-color:var(--pink)}
+.figsvg{padding:.6rem;max-width:min(100%,calc(80vh * 16 / 9));margin:0 auto}.figsvg svg.fs{width:100%;height:auto;display:block}
+.flowbox{max-width:min(100%,calc(80vh * 1.22))}
+svg.fs .it{fill:#fff;font-family:var(--f);font-size:23px;font-weight:500}
+svg.fs .it.sm{font-size:20px}svg.fs .it.fl{font-size:25px}svg.fs .it.b{font-weight:800}svg.fs .it.big{font-size:30px}svg.fs .it.big2{font-size:28px}
+svg.fs .it.mono{font-family:var(--mono);font-size:20px}svg.fs .it.tm{font-size:21px}svg.fs .tg{fill:#6ef0a8}
+svg.fs .it.tag{font-size:22px;paint-order:stroke;stroke:rgba(90,70,200,.7);stroke-width:8px;stroke-linejoin:round}
+svg.fs .ibx{fill:rgba(255,255,255,.13);stroke:rgba(255,255,255,.45);stroke-width:1.6}
+svg.fs .ibx.strong{fill:rgba(120,90,230,.45);stroke:rgba(255,190,240,.7);stroke-width:2.4}
+svg.fs .cchip{fill:rgba(60,140,255,.35);stroke:rgba(140,210,255,.8);stroke-width:2}svg.fs .cfold{fill:rgba(120,180,255,.55);stroke:#cfe6ff;stroke-width:2}
+svg.fs .ccol{fill:rgba(255,255,255,.08);stroke:rgba(255,255,255,.3)}
+svg.fs .lnk2{fill:none;stroke:rgba(220,210,255,.85);stroke-width:5;stroke-linejoin:round}
+svg.fs .ifb{fill:rgba(160,150,255,.35);stroke:rgba(255,255,255,.6);stroke-width:2}svg.fs .port{fill:#241a6a;stroke:#fff;stroke-width:2}
+svg.fs .sn{fill:rgba(60,200,170,.45);stroke:#7ef2cf;stroke-width:2}
+svg.fs .frm{fill:rgba(255,120,150,.55);stroke:#ffb3c8;stroke-width:2}svg.fs .frmL{stroke:#ffd7e3;stroke-width:3}svg.fs .frmT{stroke:#ff9fb8;stroke-width:3;stroke-linecap:round}
+svg.fs .env.or{fill:#ffb347;stroke:#ffe0a8;stroke-width:2}svg.fs .env.gr{fill:#26c06a;stroke:#9ff0c0;stroke-width:2}
+svg.fs .envl{fill:none;stroke:rgba(0,0,0,.35);stroke-width:3}svg.fs .spd{stroke-width:3;stroke-linecap:round}svg.fs .spd.or{stroke:#ffb347}svg.fs .spd.gr{stroke:#5ef0a0}
+svg.fs .cloud{fill:rgba(230,220,255,.9)}svg.fs .term{fill:rgba(30,22,70,.92);stroke:rgba(200,180,255,.6);stroke-width:2}svg.fs .termh{fill:rgba(70,55,140,.9)}
+svg.fs .legc{fill:rgba(255,255,255,.14);stroke:rgba(255,255,255,.4)}svg.fs .legsep{stroke:rgba(255,255,255,.3);stroke-width:2}
+svg.fs .farr{fill:none;stroke:#e9e4ff;stroke-width:4}svg.fs .dia{fill:rgba(80,200,160,.55);stroke:#a6f5d8;stroke-width:3}
+svg.fs .ichip{fill:rgba(80,120,255,.6);stroke:#bcd0ff;stroke-width:2}svg.fs .yes{fill:rgba(60,190,160,.6);stroke:#a6f5d8;stroke-width:2}svg.fs .no{fill:rgba(220,90,200,.6);stroke:#ffb6f0;stroke-width:2}
+svg.fs .bor{fill:rgba(255,160,100,.6);stroke:#ffd2a8;stroke-width:2}svg.fs .bor2{fill:rgba(255,190,130,.7);stroke:#fff1dc;stroke-width:2}
+svg.fs .bpk{fill:rgba(240,110,200,.55);stroke:#ffc2ee;stroke-width:2}svg.fs .bpk2{fill:rgba(250,150,220,.65);stroke:#ffe1f6;stroke-width:2}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+@media print{.slide{display:block;position:relative;height:auto;page-break-after:always}[data-s]{opacity:1;transform:none}#nav,#prog{display:none}html,body{overflow:visible;height:auto}}
+
+/* ---------------- дополнения для лекции по Linux ---------------- */
+.sbx{fill:rgba(255,255,255,.14);stroke:rgba(255,255,255,.55);stroke-width:1.6;transition:fill .3s var(--ez),stroke .3s var(--ez)}
+.sbx.on{fill:rgba(93,220,176,.42);stroke:var(--mint)}
+.sbx.done{fill:rgba(111,178,255,.26);stroke:rgba(111,178,255,.7)}
+.dg .stx{fill:var(--dim);font-size:17px}
+.dg .stx.dim{fill:rgba(255,255,255,.5)}
+.dg .capm{font-size:21px}
+.arh{fill:rgba(255,255,255,.62)}
+.brd{stroke:rgba(255,255,255,.45);stroke-width:2;stroke-dasharray:9 9}
+.lnk{fill:none}
+.sel{fill:rgba(93,220,176,.28);stroke:var(--mint);stroke-width:2}
+.dg .permc{font-family:var(--mono);font-size:54px;font-weight:700;fill:#fff}
+.dg .permn{font-family:var(--mono);font-size:44px;font-weight:800;fill:var(--mint)}
+/* терминал */
+.term{line-height:1.65}
+.term .pr{color:var(--mint);font-weight:700}
+.term .cm{color:#fff;font-weight:700}
+.term .ot{color:var(--dim)}
+.term .cmt{color:rgba(255,255,255,.45);font-style:italic}
+.term .tcap{font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+/* плитки команд */
+.cmdg{align-items:stretch}
+.cmdc{padding:.85rem 1.05rem}
+.cmdc p{font-size:.98rem;line-height:1.45;color:var(--dim)}
+.cmdn{font-weight:700;font-size:1.02rem;color:var(--mint);margin-bottom:.3rem;word-break:break-word}
+/* выноски */
+.callout{font-size:1.02rem;line-height:1.5}
+.callout.warn{background:rgba(240,122,180,.22);border:1.5px solid var(--pink)}
+/* анатомия команды */
+.anat{padding:1.1rem 1.3rem}
+.anatl{font-size:1.9rem;font-weight:700;display:flex;gap:1.1rem}
+.anatr{display:flex;gap:1.1rem;margin-top:.35rem;font-size:.9rem}
+.anatl .a1,.anatr .a1{color:var(--mint)}
+.anatl .a2,.anatr .a2{color:var(--sky)}
+.anatl .a3,.anatr .a3{color:var(--pink)}
+.anatr span{flex:none}
+.anatl span{flex:none}
+/* клавиши */
+.keys{display:flex;flex-wrap:wrap;gap:.6rem}
+.kb{font-size:.95rem;color:var(--dim);display:inline-flex;align-items:center;gap:.35rem}
+kbd{font-family:var(--mono);font-size:.9rem;background:rgba(255,255,255,.2);border:1px solid var(--edge);border-bottom-width:3px;border-radius:8px;padding:.1rem .45rem;color:#fff}
+/* дерево каталогов */
+.wsd .wl{white-space:normal}
+.wnote{color:#8a8fa8}
+.wl.i1{padding-left:1.6em}.wl.i2{padding-left:3.2em}
+/* шпаргалка */
+.cheat{align-items:stretch}
+.cheatc{padding:1rem 1.15rem}
+.cheatc h3{color:var(--mint);font-size:1.02rem;margin-bottom:.5rem}
+.chl{display:flex;gap:.7rem;justify-content:space-between;align-items:baseline;padding:.22rem 0;border-bottom:1px solid rgba(255,255,255,.14);font-size:.9rem}
+.chl .mono{color:#fff;font-weight:700}
+.chl span:last-child{color:var(--dim);text-align:right;flex:none;max-width:52%}
+/* таблицы этой лекции */
+.tbl td{line-height:1.45}
+.tbl td.mono{white-space:normal;word-break:break-word}
+.trn .trow input{width:12em}
+@media (max-width:767px){
+  .anatl{font-size:1.3rem;gap:.6rem}
+  .cheatc{font-size:.95rem}
+  .chl span:last-child{max-width:50%}
+}
+/* схема в паре со списком: отдаём схеме широкую колонку */
+@media (min-width:1280px){.two:has(> [data-scene]){grid-template-columns:minmax(0,1.25fr) minmax(0,.95fr)}}
+</style></head><body><div id="prog"><i></i></div><main id="deck"><section class="slide tslide" data-label="Титул" data-anim=""><div class="sc"><div class="wrap">
+<div class="title">
+  <div class="kick big">Операционные системы</div>
+  <h1>Основы Linux</h1>
+  <p class="lead">Ядро и дистрибутивы, файловая система, командная оболочка, права доступа, процессы и сетевые утилиты</p>
+  <div class="tchips"><span class="chip mono">bash</span><span class="chip mono">chmod</span><span class="chip mono">systemctl</span><span class="chip mono">ip a</span><span class="chip mono">ssh</span></div>
+  <p class="authors">Ананко Софья Михайловна<br>Качур Анна Юрьевна</p>
+</div><svg class="chr chr-r" viewBox="0 0 200 250" aria-hidden="true"><ellipse cx="100" cy="230" rx="62" ry="14" fill="rgba(10,6,40,.28)"/><path d="M58 232c-12 0-18-6-14-13l20-26 28 8z" fill="#f7a823" stroke="#c97f0d" stroke-width="2"/><path d="M142 232c12 0 18-6 14-13l-20-26-28 8z" fill="#f7a823" stroke="#c97f0d" stroke-width="2"/><path d="M100 22c34 0 54 26 54 62 0 16-4 28-4 42 0 34-16 68-50 68s-50-34-50-68c0-14-4-26-4-42 0-36 20-62 54-62z" fill="#1c1c26"/><path d="M100 88c22 0 36 22 36 56 0 32-14 50-36 50s-36-18-36-50c0-34 14-56 36-56z" fill="#fdfdf6"/><path d="M46 118c-12 8-18 26-14 44 3 13 11 20 17 17 5-3 4-12 1-24-3-13-3-27-4-37z" fill="#1c1c26"/><path d="M154 118c12 8 18 26 14 44-3 13-11 20-17 17-5-3-4-12-1-24 3-13 3-27 4-37z" fill="#1c1c26"/><ellipse cx="82" cy="72" rx="13" ry="17" fill="#fdfdf6"/><ellipse cx="118" cy="72" rx="13" ry="17" fill="#fdfdf6"/><circle cx="85" cy="75" r="6" fill="#1c1c26"/><circle cx="115" cy="75" r="6" fill="#1c1c26"/><path d="M100 78c14 0 22 8 22 15s-10 11-22 11-22-4-22-11 8-15 22-15z" fill="#f7a823" stroke="#c97f0d" stroke-width="1.5"/><path d="M78 93c6 4 14 6 22 6s16-2 22-6" fill="none" stroke="#c97f0d" stroke-width="1.5"/></svg></div></div></section><section class="slide tight" data-label="Цели лекции" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Введение</div><h2>Цели лекции</h2></header><ol class="steps "><li data-s="1"><span class="badge">1</span><div>Разобраться, чем ядро Linux отличается от дистрибутива и операционной системы целиком.</div></li><li data-s="2"><span class="badge">2</span><div>Научиться ориентироваться в файловой системе и уверенно работать в командной оболочке.</div></li><li data-s="3"><span class="badge">3</span><div>Понимать модель прав доступа и управлять пользователями, процессами и службами.</div></li><li data-s="4"><span class="badge">4</span><div>Освоить базовый набор сетевых утилит: адреса, маршруты, диагностика, удалённый доступ.</div></li><li data-s="5"><span class="badge">5</span><div>Уметь читать чужие команды и конвейеры, а не только набирать свои.</div></li></ol></div></div></section><section class="slide " data-label="Что такое Linux" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Введение</div><h2>Что такое Linux</h2></header>
+<div class="two">
+  <div class="vstack">
+    <p class="p">Строго говоря, <b>Linux — это ядро</b>: программа, которая управляет процессором, памятью,
+    устройствами и файловыми системами. Её написал Линус Торвальдс в 1991 году.</p>
+    <p class="p">То, что устанавливают на компьютер, — это <b>дистрибутив</b>: ядро плюс системные библиотеки,
+    утилиты проекта GNU, оболочка, менеджер пакетов и прикладные программы. Поэтому корректное
+    название системы — <b>GNU/Linux</b>.</p>
+  </div>
+  <div class="g2"><article class="card fc c-mint" data-s="1"><div class="ftag mono">Ядро</div><p>Планировщик процессов, управление памятью, драйверы, сетевой стек, файловые системы.</p></article><article class="card fc c-sky" data-s="2"><div class="ftag mono">Системные утилиты</div><p>coreutils, оболочка bash, systemd, менеджер пакетов — с ними работает человек.</p></article><article class="card fc c-lilac" data-s="3"><div class="ftag mono">Дистрибутив</div><p>Ядро + утилиты + правила сборки и обновления: Debian, Ubuntu, Astra Linux, Fedora.</p></article><article class="card fc c-pink" data-s="4"><div class="ftag mono">Сообщество</div><p>Открытый исходный код, публичная разработка, тысячи независимых сопровождающих.</p></article></div>
+</div></div></div></section><section class="slide tight" data-label="История" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Введение</div><h2>От Unix к Linux</h2></header>
+<div class="vstack">
+<div class="tw card"><table class="tbl "><thead><tr><th>Год</th><th>Событие</th><th>Что произошло</th></tr></thead><tbody><tr data-s="1"><th>1969</th><td class="mono">Unix</td><td class="">Кен Томпсон и Деннис Ритчи создают Unix в Bell Labs; в 1973 году он переписан на языке C и становится переносимым.</td></tr><tr data-s="2"><th>1983</th><td class="mono">GNU</td><td class="">Ричард Столлман объявляет проект GNU — свободный набор утилит и компиляторов, совместимых с Unix. Ядра у проекта нет.</td></tr><tr data-s="3"><th>1987</th><td class="mono">MINIX</td><td class="">Эндрю Таненбаум выпускает учебную Unix-подобную систему MINIX; на ней учится студент Линус Торвальдс.</td></tr><tr data-s="4"><th>1991</th><td class="mono">Ядро Linux</td><td class="">Торвальдс публикует первую версию ядра (0.01) и открывает исходный код.</td></tr><tr data-s="5"><th>1992</th><td class="mono">GPL</td><td class="">Ядро выходит под лицензией GPL v2 — вместе с утилитами GNU получается полноценная свободная система.</td></tr><tr data-s="6"><th>1993—2004</th><td class="mono">Дистрибутивы</td><td class="">Появляются Slackware, Debian, Red Hat, SUSE, Gentoo, Ubuntu — разные способы собрать одно и то же ядро.</td></tr><tr data-s="7"><th>Сегодня</th><td class="mono">Повсюду</td><td class="">Linux — основа серверов, облаков, Android, сетевого оборудования и всех суперкомпьютеров из списка TOP500.</td></tr></tbody></table></div>
+</div></div></div></section><section class="slide " data-label="Свободное ПО" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Введение</div><h2>Свободное программное обеспечение и GPL</h2></header>
+<div class="two">
+  <div class="g2"><article class="card fc c-mint" data-s="1"><div class="ftag mono">Свобода 0</div><p>Запускать программу для любых целей, без ограничений по области применения.</p></article><article class="card fc c-sky" data-s="2"><div class="ftag mono">Свобода 1</div><p>Изучать, как она работает, и изменять её. Для этого нужен доступ к исходному коду.</p></article><article class="card fc c-lilac" data-s="3"><div class="ftag mono">Свобода 2</div><p>Распространять копии, помогая другим.</p></article><article class="card fc c-pink" data-s="4"><div class="ftag mono">Свобода 3</div><p>Распространять изменённые версии, чтобы сообщество получило пользу от доработок.</p></article></div>
+  <div class="vstack">
+    <p class="p">Ядро распространяется по лицензии <b>GPL v2</b>. Её ключевое требование — «копилефт»:
+    если вы передаёте кому-то программу, собранную из GPL-кода, вы обязаны передать и исходный код
+    производной работы на тех же условиях.</p>
+    <div class="callout ">«Свободное» означает свободу, а не цену: продавать дистрибутивы GPL разрешено. Именно на этом построена модель Red Hat и SUSE — платят за поддержку и сертификацию, а не за биты.</div>
+    <p class="p sm">Рядом существуют более разрешительные лицензии — BSD, MIT, Apache 2.0. Они не требуют
+    открывать производный код, поэтому используются в проприетарных продуктах.</p>
+  </div>
+</div></div></div></section><section class="slide " data-label="Где работает Linux" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Введение</div><h2>Где применяется Linux</h2></header><div class="g3 cmdg"><article class="card cmdc" data-s="1"><div class="mono cmdn">Серверы и облака</div><p>Веб-серверы, базы данных, контейнеры Docker и Kubernetes. Большая часть публичных сайтов работает на Linux.</p></article><article class="card cmdc" data-s="2"><div class="mono cmdn">Сетевое оборудование</div><p>Маршрутизаторы, коммутаторы, точки доступа, межсетевые экраны, SDN-платформы: внутри — урезанный Linux.</p></article><article class="card cmdc" data-s="3"><div class="mono cmdn">Android</div><p>Мобильная ОС построена на ядре Linux с собственным пространством пользователя.</p></article><article class="card cmdc" data-s="4"><div class="mono cmdn">Встраиваемые системы</div><p>Телевизоры, автомобильные мультимедиа, промышленные контроллеры, Raspberry RouterOS и OpenWrt.</p></article><article class="card cmdc" data-s="5"><div class="mono cmdn">Суперкомпьютеры</div><p>Все 500 машин списка TOP500 работают под управлением Linux.</p></article><article class="card cmdc" data-s="6"><div class="mono cmdn">Рабочие станции</div><p>Разработка, инженерные расчёты, образование; в России — Astra Linux, «Альт», РЕД ОС.</p></article></div></div></div></section><section class="slide tight" data-label="Архитектура" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Устройство системы</div><h2>Из чего состоит система</h2></header>
+<div class="two">
+  <div class="card dgcard " data-scene="arch"><svg class="dg" viewBox="0 0 1000 510" role="img"><rect data-id="l1" x="20" y="20" width="700" height="68" rx="12" class="sbx "/><text class="bxt" x="370.0" y="47.0" text-anchor="middle" font-size="21">Прикладные программы</text><text class="stx" x="370.0" y="74.0" text-anchor="middle">firefox, python3, nginx, bash-скрипты</text><rect data-id="l2" x="20" y="102" width="700" height="68" rx="12" class="sbx "/><text class="bxt" x="370.0" y="129.0" text-anchor="middle" font-size="21">Командная оболочка и утилиты</text><text class="stx" x="370.0" y="156.0" text-anchor="middle">bash, coreutils, grep, ssh</text><rect data-id="l3" x="20" y="184" width="700" height="68" rx="12" class="sbx "/><text class="bxt" x="370.0" y="211.0" text-anchor="middle" font-size="21">Системные библиотеки</text><text class="stx" x="370.0" y="238.0" text-anchor="middle">glibc: printf(), open(), socket()</text><rect data-id="l4" x="20" y="266" width="700" height="68" rx="12" class="sbx "/><text class="bxt" x="370.0" y="293.0" text-anchor="middle" font-size="21">Ядро Linux</text><text class="stx" x="370.0" y="320.0" text-anchor="middle">процессы, память, файловые системы, сеть</text><rect data-id="l5" x="20" y="348" width="700" height="68" rx="12" class="sbx "/><text class="bxt" x="370.0" y="375.0" text-anchor="middle" font-size="21">Драйверы устройств</text><text class="stx" x="370.0" y="402.0" text-anchor="middle">модули ядра: .ko</text><rect data-id="l6" x="20" y="430" width="700" height="68" rx="12" class="sbx "/><text class="bxt" x="370.0" y="457.0" text-anchor="middle" font-size="21">Оборудование</text><text class="stx" x="370.0" y="484.0" text-anchor="middle">процессор, память, диски, сетевая карта</text><line class="brd" x1="10" y1="259" x2="990" y2="259"/><text class="stx cM" x="742" y="112">пространство</text><text class="stx cM" x="742" y="136">пользователя</text><text class="stx cS" x="742" y="372">пространство</text><text class="stx cS" x="742" y="396">ядра</text></svg></div>
+  <div class="vstack">
+    <p class="p sm">Система строится слоями: каждый верхний слой пользуется услугами нижнего и не знает,
+    как тот устроен внутри.</p>
+    <ol class="steps "><li data-s="1"><span class="badge">1</span><div><b>Оборудование</b> — процессор, память, диски, сетевые карты.</div></li><li data-s="2"><span class="badge">2</span><div><b>Драйверы</b> — модули ядра, знающие протокол конкретного устройства.</div></li><li data-s="3"><span class="badge">3</span><div><b>Ядро</b> — распределяет процессорное время, память и доступ к устройствам между программами.</div></li><li data-s="4"><span class="badge">4</span><div><b>Библиотеки</b> — готовые функции, через которые программы обращаются к ядру.</div></li><li data-s="5"><span class="badge">5</span><div><b>Оболочка и утилиты</b> — то, с чем работает администратор.</div></li><li data-s="6"><span class="badge">6</span><div><b>Прикладные программы</b> — ради них всё и затевалось.</div></li></ol>
+  </div>
+</div></div></div></section><section class="slide " data-label="Задачи ядра" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Устройство системы</div><h2>Что делает ядро</h2></header><div class="g3"><article class="card fc c-mint" data-s="1"><div class="ftag mono">Процессы</div><p>Создаёт и завершает процессы, распределяет между ними процессорное время (планировщик).</p></article><article class="card fc c-sky" data-s="2"><div class="ftag mono">Память</div><p>Выдаёт каждому процессу собственное виртуальное адресное пространство и изолирует их друг от друга.</p></article><article class="card fc c-lilac" data-s="3"><div class="ftag mono">Файловые системы</div><p>Единое дерево каталогов поверх разных носителей: ext4, XFS, Btrfs, сетевые и виртуальные ФС.</p></article><article class="card fc c-pink" data-s="4"><div class="ftag mono">Устройства</div><p>Драйверы устройств, в том числе подгружаемые модули (.ko) — их можно добавить без пересборки ядра.</p></article><article class="card fc c-mint" data-s="5"><div class="ftag mono">Сеть</div><p>Сетевой стек: TCP/IP, маршрутизация, фильтрация пакетов netfilter.</p></article><article class="card fc c-sky" data-s="6"><div class="ftag mono">Безопасность</div><p>Проверка прав доступа при каждой операции, пространства имён и cgroups — основа контейнеров.</p></article></div></div></div></section><section class="slide tight" data-label="Системные вызовы" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Устройство системы</div><h2>Два режима работы процессора</h2></header>
+<div class="two">
+  <div class="card dgcard " data-scene="syscall"><svg class="dg" viewBox="0 0 1000 420" role="img"><rect x="80" y="20" width="360" height="70" rx="12" class="sbx "/><text class="bxt" x="260.0" y="48.0" text-anchor="middle" font-size="21">Программа</text><text class="stx" x="260.0" y="75.0" text-anchor="middle">cat /etc/hostname</text><rect x="80" y="120" width="360" height="70" rx="12" class="sbx "/><text class="bxt" x="260.0" y="148.0" text-anchor="middle" font-size="21">Библиотека glibc</text><text class="stx" x="260.0" y="175.0" text-anchor="middle">функция open()</text><rect x="560" y="20" width="360" height="170" rx="12" class="sbx "/><text class="bxt" x="740.0" y="98.0" text-anchor="middle" font-size="21">Ядро Linux</text><text class="stx" x="740.0" y="125.0" text-anchor="middle">обработчик системного вызова</text><rect x="560" y="240" width="360" height="70" rx="12" class="sbx "/><text class="bxt" x="740.0" y="268.0" text-anchor="middle" font-size="21">Драйвер и диск</text><text class="stx" x="740.0" y="295.0" text-anchor="middle">чтение блоков</text><line class="brd v" x1="500" y1="10" x2="500" y2="330"/><text class="stx cM" x="260" y="355" text-anchor="middle">пространство пользователя</text><text class="stx cS" x="740" y="355" text-anchor="middle">пространство ядра</text><line class="lnk" x1="440" y1="155" x2="542" y2="155"/><polygon points="556,155 540,147 540,163" class="arh"/><line class="lnk" x1="740" y1="190" x2="740" y2="226"/><polygon points="740,240 732,224 748,224" class="arh"/><path class="lnk bk" d="M560 275 L470 275 L470 55 L444 55"/><polygon points="440,55 456,47 456,63" class="arh"/><g data-id="sq" class="an"><rect x="-105.0" y="-19.0" width="210" height="38" rx="8" class="pk-s" transform="translate(300 155)"/><text class="pkt" x="300" y="161" text-anchor="middle" font-size="19">syscall: open()</text></g><g data-id="dt" class="an"><rect x="-95.0" y="-19.0" width="190" height="38" rx="8" class="pk-m" transform="translate(740 275)"/><text class="pkt" x="740" y="281" text-anchor="middle" font-size="19">данные файла</text></g><text data-id="scap" class="capm" x="500" y="400" text-anchor="middle"></text></svg></div>
+  <div class="vstack">
+    <p class="p sm">Процессор работает в двух режимах. В <b>режиме пользователя</b> программе доступна
+    только её собственная память. В <b>режиме ядра</b> доступно всё оборудование.</p>
+    <p class="p sm">Перейти границу можно единственным законным способом — <b>системным вызовом</b>.
+    Именно поэтому упавшая программа не роняет систему, а один пользователь не может прочитать
+    файлы другого в обход прав доступа.</p>
+    <div class="callout ">Посмотреть системные вызовы живой программы: <span class='mono'>strace -c ls</span> — покажет, сколько раз и какие вызовы были сделаны.</div>
+  </div>
+</div></div></div></section><section class="slide " data-label="Дистрибутивы" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Дистрибутивы</div><h2>Основные семейства дистрибутивов</h2></header><div class="tw card"><table class="tbl "><thead><tr><th>Дистрибутив</th><th>Пакеты и менеджер</th><th>Особенности</th></tr></thead><tbody><tr data-s="1"><th>Debian</th><td class="mono">deb, apt</td><td class="">Стабильность и строгие правила сборки. Основа для сотен производных систем.</td></tr><tr data-s="2"><th>Ubuntu</th><td class="mono">deb, apt</td><td class="">Производная Debian с предсказуемым графиком выпусков; LTS-версии поддерживаются 5 лет.</td></tr><tr data-s="3"><th>RHEL / Fedora</th><td class="mono">rpm, dnf</td><td class="">Корпоративный стандарт и её свободные производные — CentOS Stream, Rocky, AlmaLinux.</td></tr><tr data-s="4"><th>openSUSE</th><td class="mono">rpm, zypper</td><td class="">Конфигуратор YaST, откат системы средствами Btrfs.</td></tr><tr data-s="5"><th>Arch Linux</th><td class="mono">pkg.tar.zst, pacman</td><td class="">Модель rolling release: обновления приходят непрерывно, без версий.</td></tr><tr data-s="6"><th>Astra Linux, «Альт», РЕД ОС</th><td class="mono">deb / rpm</td><td class="">Российские дистрибутивы, сертифицированные для защищённых информационных систем.</td></tr></tbody></table></div></div></div></section><section class="slide " data-label="Что общего" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Дистрибутивы</div><h2>Что общего у всех дистрибутивов</h2></header>
+<div class="two">
+  <div class="vstack">
+    <p class="p">Различия дистрибутивов лежат на поверхности: набор предустановленных программ,
+    оформление, менеджер пакетов, политика обновлений. Под ними — одно и то же.</p>
+    <div class="callout ">Научившись работать в одном дистрибутиве, вы работаете в любом: меняются названия пакетов и путь к конфигурационному файлу, но не сами понятия.</div>
+  </div>
+  <div class="g2"><article class="card fc c-mint" data-s="1"><div class="ftag mono">Ядро</div><p>То же самое ядро Linux, отличаются только версия и набор патчей.</p></article><article class="card fc c-sky" data-s="2"><div class="ftag mono">FHS</div><p>Одинаковое дерево каталогов: /etc, /var, /usr, /home.</p></article><article class="card fc c-lilac" data-s="3"><div class="ftag mono">POSIX</div><p>Общий набор системных вызовов и утилит — команды и скрипты переносимы.</p></article><article class="card fc c-pink" data-s="4"><div class="ftag mono">Оболочка</div><p>bash или совместимая: одинаковый синтаксис, конвейеры, перенаправления.</p></article></div>
+</div></div></div></section><section class="slide tight" data-label="Загрузка" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Устройство системы</div><h2>Как система загружается</h2></header>
+<div class="vstack">
+  <div class="card dgcard " data-scene="boot"><svg class="dg" viewBox="0 0 1024 224" role="img"><rect data-id="u1" x="6" y="26" width="180" height="92" rx="12" class="sbx "/><text class="bxt" x="96.0" y="65.0" text-anchor="middle" font-size="17">UEFI / BIOS</text><text class="stx" x="96.0" y="92.0" text-anchor="middle">POST, поиск загрузчика</text><line class="lnk" x1="192" y1="72" x2="196" y2="72"/><polygon points="210,72 194,64 194,80" class="arh"/><rect data-id="u2" x="211" y="26" width="180" height="92" rx="12" class="sbx "/><text class="bxt" x="301.0" y="65.0" text-anchor="middle" font-size="17">GRUB</text><text class="stx" x="301.0" y="92.0" text-anchor="middle">меню, параметры ядра</text><line class="lnk" x1="397" y1="72" x2="401" y2="72"/><polygon points="415,72 399,64 399,80" class="arh"/><rect data-id="u3" x="416" y="26" width="180" height="92" rx="12" class="sbx "/><text class="bxt" x="506.0" y="65.0" text-anchor="middle" font-size="17">Ядро + initramfs</text><text class="stx" x="506.0" y="92.0" text-anchor="middle">распаковка, драйверы</text><line class="lnk" x1="602" y1="72" x2="606" y2="72"/><polygon points="620,72 604,64 604,80" class="arh"/><rect data-id="u4" x="621" y="26" width="180" height="92" rx="12" class="sbx "/><text class="bxt" x="711.0" y="65.0" text-anchor="middle" font-size="17">systemd, PID 1</text><text class="stx" x="711.0" y="92.0" text-anchor="middle">запуск юнитов</text><line class="lnk" x1="807" y1="72" x2="811" y2="72"/><polygon points="825,72 809,64 809,80" class="arh"/><rect data-id="u5" x="826" y="26" width="180" height="92" rx="12" class="sbx "/><text class="bxt" x="916.0" y="65.0" text-anchor="middle" font-size="17">graphical.target</text><text class="stx" x="916.0" y="92.0" text-anchor="middle">система готова</text><text data-id="bcap" class="capm" x="512" y="168" text-anchor="middle"></text><text data-id="bsub" class="stx" x="512" y="204" text-anchor="middle"></text></svg></div>
+  <div class="two">
+    <div class="card term mono "><div class="dimt tcap">Сколько заняла загрузка</div><div><span class="pr">$</span> <span class="cm">systemd-analyze</span></div><div class="ot">Startup finished in 3.512s (firmware) + 2.104s (loader) + 1.876s (kernel) + 6.940s (userspace) = 14.433s</div><div><span class="pr">$</span> <span class="cm">systemd-analyze blame | head -3</span></div><div class="ot">4.318s docker.service</div><div class="ot">1.902s NetworkManager-wait-online.service</div><div class="ot">912ms snapd.service</div></div>
+    <div class="callout ">Если система не загружается — смотрите, на каком из пяти шагов остановка. Нет меню GRUB — проблема в загрузчике или разделе /boot; есть сообщения ядра, но нет входа в систему — разбирайтесь со службами systemd через <span class='mono'>journalctl -b</span>.</div>
+  </div>
+</div></div></div></section><section class="slide " data-label="Всё есть файл" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Файловая система</div><h2>«Всё есть файл»</h2></header>
+<div class="two">
+  <div class="vstack">
+    <p class="p">В Unix-подобных системах почти любой объект представлен файлом: к нему применимы
+    одни и те же операции — открыть, прочитать, записать, закрыть. Это позволяет одним набором
+    утилит работать с совершенно разными сущностями.</p>
+    <div class="callout ">Отсюда простое следствие: чтобы узнать состояние системы, часто достаточно прочитать файл командой <span class="mono">cat</span>, а чтобы изменить — записать в него.</div>
+  </div>
+  <div class="card term mono "><div><span class="pr">$</span> <span class="cm">cat /proc/cpuinfo | grep 'model name' | head -1</span></div><div class="ot">model name : Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz</div><div><span class="pr">$</span> <span class="cm">cat /proc/meminfo | head -2</span></div><div class="ot">MemTotal:       16311412 kB</div><div class="ot">MemFree:         5120236 kB</div><div><span class="pr">$</span> <span class="cm">ls -l /dev/sda /dev/null</span></div><div class="ot">brw-rw---- 1 root disk 8, 0 мая 14 09:21 /dev/sda</div><div class="ot">crw-rw-rw- 1 root root 1, 3 мая 14 09:21 /dev/null</div><div class="cmt"># b — блочное устройство (диск), c — символьное</div></div>
+</div></div></div></section><section class="slide tight" data-label="Дерево каталогов" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Файловая система</div><h2>Стандарт FHS: единое дерево</h2></header>
+<div class="wsx">
+  <div class="wsk"><div class="wsd"><div class="wl i0">/<span class="wnote"> &mdash; корень, единственная вершина дерева</span></div><div class="wl i1">bin &rarr; usr/bin<span class="wnote"> &mdash; исполняемые файлы базовых команд</span></div><div class="wl i1">boot<span class="wnote"> &mdash; ядро vmlinuz, initramfs, файлы GRUB</span></div><div class="wl i1">dev<span class="wnote"> &mdash; файлы устройств: sda, tty, null</span></div><div class="wl i1">etc<span class="wnote"> &mdash; конфигурационные файлы всей системы</span></div><div class="wl i1">home<span class="wnote"> &mdash; домашние каталоги пользователей</span></div><div class="wl i2">student<span class="wnote"> &mdash; ~ для пользователя student</span></div><div class="wl i1">lib &rarr; usr/lib<span class="wnote"> &mdash; библиотеки и модули ядра</span></div><div class="wl i1">media, mnt<span class="wnote"> &mdash; точки монтирования сменных и временных носителей</span></div><div class="wl i1">opt<span class="wnote"> &mdash; стороннее ПО, установленное не из репозитория</span></div><div class="wl i1">proc<span class="wnote"> &mdash; виртуальная ФС: процессы и параметры ядра</span></div><div class="wl i1">root<span class="wnote"> &mdash; домашний каталог суперпользователя</span></div><div class="wl i1">run, tmp<span class="wnote"> &mdash; временные данные, очищаются при перезагрузке</span></div><div class="wl i1">sbin &rarr; usr/sbin<span class="wnote"> &mdash; системные утилиты администратора</span></div><div class="wl i1">srv<span class="wnote"> &mdash; данные, которые отдают службы</span></div><div class="wl i1">sys<span class="wnote"> &mdash; виртуальная ФС устройств и драйверов</span></div><div class="wl i1">usr<span class="wnote"> &mdash; программы и данные, не меняющиеся при работе</span></div><div class="wl i1">var<span class="wnote"> &mdash; изменяемые данные: журналы, очереди, кеш</span></div></div></div>
+  <div class="vstack">
+    <p class="p sm">Дерево <b>одно на всю систему</b>. Второй диск, флешка или сетевой ресурс не получают
+    отдельную букву — они <i>монтируются</i> в выбранный каталог и становятся его содержимым.</p>
+    <p class="p sm">Регистр букв различается: <span class="mono">Report.txt</span> и
+    <span class="mono">report.txt</span> — разные файлы. Разделитель пути — прямой слэш
+    <span class="mono">/</span>.</p>
+    <p class="p sm">Файл, имя которого начинается с точки, считается скрытым: <span class="mono">.bashrc</span>,
+    <span class="mono">.ssh/</span>. Показать их: <span class="mono">ls -a</span>.</p>
+  </div>
+</div></div></div></section><section class="slide " data-label="Ключевые каталоги" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Файловая система</div><h2>Куда что класть</h2></header><div class="tw card"><table class="tbl "><thead><tr><th>Каталог</th><th>Примеры</th><th>Назначение</th></tr></thead><tbody><tr data-s="1"><th>/etc</th><td class="mono">nginx/nginx.conf, passwd, fstab, hosts</td><td class="">Настройки. Текстовые файлы, которые правят редактором и хранят в системе контроля версий.</td></tr><tr data-s="2"><th>/var/log</th><td class="mono">syslog, auth.log, nginx/access.log</td><td class="">Журналы. Первое место, куда смотрят при разборе инцидента.</td></tr><tr data-s="3"><th>/home/user</th><td class="mono">Документы, .bashrc, .ssh/</td><td class="">Личные данные и настройки пользователя.</td></tr><tr data-s="4"><th>/usr/bin</th><td class="mono">python3, grep, ssh</td><td class="">Программы, доступные всем пользователям.</td></tr><tr data-s="5"><th>/usr/local</th><td class="mono">собственные сборки</td><td class="">То, что администратор поставил мимо менеджера пакетов.</td></tr><tr data-s="6"><th>/tmp</th><td class="mono">временные файлы</td><td class="">Доступен всем на запись, очищается при перезагрузке.</td></tr><tr data-s="7"><th>/proc/PID</th><td class="mono">status, cmdline, fd/</td><td class="">Живое состояние каждого процесса в виде файлов.</td></tr></tbody></table></div></div></div></section><section class="slide tight" data-label="Пути" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Файловая система</div><h2>Абсолютные и относительные пути</h2></header>
+<div class="two">
+  <div class="card term mono "><div><span class="pr">$</span> <span class="cm">pwd</span></div><div class="ot">/home/student/labs</div><div><span class="pr">$</span> <span class="cm">cd /var/log</span></div><div class="cmt"># абсолютный путь — от корня</div><div><span class="pr">$</span> <span class="cm">cd ../labs/net</span></div><div class="cmt"># относительный — от текущего каталога</div><div><span class="pr">$</span> <span class="cm">cd ~</span></div><div class="cmt"># домашний каталог, то же что /home/student</div><div><span class="pr">$</span> <span class="cm">cd -</span></div><div class="cmt"># вернуться в предыдущий каталог</div><div><span class="pr">$</span> <span class="cm">cd</span></div><div class="cmt"># без аргументов — тоже домой</div></div>
+  <div class="vstack">
+    <div class="tw card"><table class="tbl "><thead><tr><th>Обозначение</th><th>Что значит</th></tr></thead><tbody><tr data-s="1"><th>/</th><td class="">Корень дерева. Путь, начинающийся со слэша, — абсолютный.</td></tr><tr data-s="2"><th>.</th><td class="">Текущий каталог. Запуск своей программы: ./script.sh</td></tr><tr data-s="3"><th>..</th><td class="">Родительский каталог.</td></tr><tr data-s="4"><th>~</th><td class="">Домашний каталог текущего пользователя.</td></tr><tr data-s="5"><th>*</th><td class="">Любое число любых символов: *.log</td></tr><tr data-s="6"><th>?</th><td class="">Ровно один любой символ: log?.txt</td></tr><tr data-s="7"><th>[a-c]*</th><td class="">Файлы, начинающиеся с a, b или c.</td></tr></tbody></table></div>
+    <div class="callout ">Подстановку <span class="mono">*</span> раскрывает оболочка, а не сама команда: <span class="mono">rm *.log</span> получит уже готовый список имён.</div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Оболочка" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Командная строка</div><h2>Оболочка и анатомия команды</h2></header>
+<div class="two">
+  <div class="vstack">
+    <p class="p sm"><b>Оболочка</b> (shell) — программа, которая читает команды, запускает процессы и
+    возвращает их вывод. Стандартная оболочка большинства дистрибутивов — <b>bash</b>, встречаются
+    также zsh, fish, dash.</p>
+    <div class="card anat">
+      <div class="anatl mono"><span class="a1">ls</span> <span class="a2">-l -h</span> <span class="a3">/var/log</span></div>
+      <div class="anatr"><span class="a1">команда</span><span class="a2">ключи (опции)</span><span class="a3">аргументы</span></div>
+    </div>
+    <p class="p sm">Короткие ключи пишутся с одним дефисом и объединяются: <span class="mono">-l -h</span> = <span class="mono">-lh</span>.
+    Длинные — с двумя: <span class="mono">--human-readable</span>.</p>
+  </div>
+  <div class="vstack">
+    <div class="card term mono "><div class="dimt tcap">Кто я и где я</div><div><span class="pr">$</span> <span class="cm">whoami</span></div><div class="ot">student</div><div><span class="pr">$</span> <span class="cm">hostname</span></div><div class="ot">srv-lab-01</div><div><span class="pr">$</span> <span class="cm">uname -r</span></div><div class="ot">6.8.0-45-generic</div><div><span class="pr">$</span> <span class="cm">date</span></div><div class="ot">Вт 14 мая 2026 09:42:17 MSK</div><div><span class="pr">$</span> <span class="cm">uptime</span></div><div class="ot"> 09:42:20 up 3 days,  2:14,  2 users,  load average: 0,18 0,22 0,19</div></div>
+    <div class="callout ">Подсказка по любой команде: <span class="mono">man ls</span> (выход — клавиша q), кратко — <span class="mono">ls --help</span>. Клавиша Tab дополняет имена, стрелки ↑/↓ листают историю, <span class="mono">history</span> показывает её целиком.</div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Навигация" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Командная строка</div><h2>Навигация и просмотр каталогов</h2></header>
+<div class="two">
+  <div class="card term mono "><div><span class="pr">$</span> <span class="cm">ls</span></div><div class="ot">lab1  lab2  notes.txt  report.pdf</div><div><span class="pr">$</span> <span class="cm">ls -lh /var/log</span></div><div class="ot">итого 2,1M</div><div class="ot">-rw-r----- 1 syslog adm  318K мая 14 09:30 syslog</div><div class="ot">-rw-r----- 1 syslog adm   47K мая 14 08:00 auth.log</div><div class="ot">drwxr-xr-x 2 root   root 4,0K мая  1 12:11 nginx</div><div><span class="pr">$</span> <span class="cm">ls -a ~</span></div><div class="ot">.  ..  .bashrc  .ssh  labs  notes.txt</div><div><span class="pr">$</span> <span class="cm">ls -lt | head -5</span></div><div class="cmt"># пять самых свежих файлов</div></div>
+  <div class="g2 cmdg"><article class="card cmdc" data-s="1"><div class="mono cmdn">pwd</div><p>Показать текущий каталог полностью.</p></article><article class="card cmdc" data-s="2"><div class="mono cmdn">ls -l</div><p>Подробный вывод: права, владелец, размер, дата.</p></article><article class="card cmdc" data-s="3"><div class="mono cmdn">ls -a</div><p>Показать скрытые файлы (начинающиеся с точки).</p></article><article class="card cmdc" data-s="4"><div class="mono cmdn">ls -lh</div><p>Размеры в килобайтах и мегабайтах вместо байтов.</p></article><article class="card cmdc" data-s="5"><div class="mono cmdn">ls -lt / -lS</div><p>Сортировка по времени изменения / по размеру.</p></article><article class="card cmdc" data-s="6"><div class="mono cmdn">ls -R</div><p>Рекурсивно, вместе с подкаталогами.</p></article><article class="card cmdc" data-s="7"><div class="mono cmdn">tree -L 2</div><p>Дерево каталогов на два уровня вглубь.</p></article><article class="card cmdc" data-s="8"><div class="mono cmdn">du -sh каталог</div><p>Сколько места занимает каталог целиком.</p></article></div>
+</div></div></div></section><section class="slide tight" data-label="Работа с файлами" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Командная строка</div><h2>Создание, просмотр, копирование</h2></header>
+<div class="two">
+  <div class="g2 cmdg"><article class="card cmdc" data-s="1"><div class="mono cmdn">touch file.txt</div><p>Создать пустой файл или обновить время изменения существующего.</p></article><article class="card cmdc" data-s="2"><div class="mono cmdn">mkdir -p a/b/c</div><p>Создать каталог; -p создаёт всю цепочку сразу.</p></article><article class="card cmdc" data-s="3"><div class="mono cmdn">cat file</div><p>Вывести файл целиком. Для больших файлов неудобно.</p></article><article class="card cmdc" data-s="4"><div class="mono cmdn">less file</div><p>Постраничный просмотр: стрелки, /поиск, q — выход.</p></article><article class="card cmdc" data-s="5"><div class="mono cmdn">head -20 / tail -20</div><p>Первые или последние 20 строк.</p></article><article class="card cmdc" data-s="6"><div class="mono cmdn">tail -f /var/log/syslog</div><p>Следить за журналом в реальном времени.</p></article><article class="card cmdc" data-s="7"><div class="mono cmdn">cp -r src dst</div><p>Копировать; -r — вместе с содержимым каталога.</p></article><article class="card cmdc" data-s="8"><div class="mono cmdn">mv old new</div><p>Переместить или переименовать — это одна операция.</p></article><article class="card cmdc" data-s="9"><div class="mono cmdn">rm file / rm -r dir</div><p>Удалить файл или каталог с содержимым.</p></article><article class="card cmdc" data-s="10"><div class="mono cmdn">ln -s /path link</div><p>Символьная ссылка — ярлык на файл или каталог.</p></article></div>
+  <div class="vstack">
+    <div class="card term mono "><div><span class="pr">$</span> <span class="cm">mkdir -p ~/labs/net/lab3</span></div><div><span class="pr">$</span> <span class="cm">cd ~/labs/net/lab3</span></div><div><span class="pr">$</span> <span class="cm">touch report.md</span></div><div><span class="pr">$</span> <span class="cm">cp /etc/hosts ./hosts.bak</span></div><div><span class="pr">$</span> <span class="cm">mv report.md lab3-report.md</span></div><div><span class="pr">$</span> <span class="cm">ls -l</span></div><div class="ot">-rw-r--r-- 1 student student 221 мая 14 09:51 hosts.bak</div><div class="ot">-rw-r--r-- 1 student student   0 мая 14 09:50 lab3-report.md</div></div>
+    <div class="callout warn"><b>Осторожно.</b> У <span class="mono">rm</span> нет корзины: удалённое не восстанавливается. Команда <span class="mono">rm -rf /</span> или случайный пробел в <span class="mono">rm -rf ~/ tmp</span> уничтожат данные без вопросов. Привыкайте сначала выполнить <span class="mono">ls</span> с тем же шаблоном и посмотреть, что именно попадёт под удаление.</div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Поиск" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Командная строка</div><h2>Поиск файлов и текста</h2></header>
+<div class="two">
+  <div class="card term mono "><div><span class="pr">$</span> <span class="cm">find /var/log -name '*.log' -mtime -1</span></div><div class="ot">/var/log/nginx/access.log</div><div class="ot">/var/log/syslog.log</div><div><span class="pr">$</span> <span class="cm">find . -type f -size +100M</span></div><div class="cmt"># файлы больше 100 мегабайт в текущем дереве</div><div><span class="pr">$</span> <span class="cm">grep -rn 'listen 80' /etc/nginx/</span></div><div class="ot">/etc/nginx/sites-enabled/default:4:    listen 80 default_server;</div><div><span class="pr">$</span> <span class="cm">grep -c 'Failed password' /var/log/auth.log</span></div><div class="ot">37</div><div><span class="pr">$</span> <span class="cm">which python3</span></div><div class="ot">/usr/bin/python3</div></div>
+  <div class="g2 cmdg"><article class="card cmdc" data-s="1"><div class="mono cmdn">find путь -name '*.conf'</div><p>Поиск по имени в дереве каталогов; поддерживает шаблоны.</p></article><article class="card cmdc" data-s="2"><div class="mono cmdn">find . -type d / -type f</div><p>Только каталоги или только обычные файлы.</p></article><article class="card cmdc" data-s="3"><div class="mono cmdn">find . -mtime -7</div><p>Изменённые за последние семь суток.</p></article><article class="card cmdc" data-s="4"><div class="mono cmdn">find . -name '*.tmp' -delete</div><p>Найти и сразу удалить — сначала проверьте без -delete.</p></article><article class="card cmdc" data-s="5"><div class="mono cmdn">grep 'шаблон' файл</div><p>Показать строки, содержащие шаблон.</p></article><article class="card cmdc" data-s="6"><div class="mono cmdn">grep -i / -v / -n</div><p>Без учёта регистра / инвертировать / с номерами строк.</p></article><article class="card cmdc" data-s="7"><div class="mono cmdn">grep -r шаблон каталог</div><p>Рекурсивно по всем файлам каталога.</p></article><article class="card cmdc" data-s="8"><div class="mono cmdn">which / type / whereis</div><p>Где лежит исполняемый файл команды.</p></article></div>
+</div></div></div></section><section class="slide " data-label="Потоки" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Потоки и конвейеры</div><h2>Три стандартных потока</h2></header>
+<div class="two">
+  <div class="g3"><article class="card fc c-sky" data-s="1"><div class="ftag mono">stdin (0)</div><p>Стандартный ввод. По умолчанию — клавиатура. Из него команда читает данные.</p></article><article class="card fc c-mint" data-s="2"><div class="ftag mono">stdout (1)</div><p>Стандартный вывод. По умолчанию — экран. Туда идёт полезный результат.</p></article><article class="card fc c-pink" data-s="3"><div class="ftag mono">stderr (2)</div><p>Стандартный поток ошибок. Тоже экран, но отдельный канал — его можно отделить от результата.</p></article></div>
+  <div class="vstack">
+    <p class="p sm">Каждая запущенная программа получает от оболочки три открытых файла с номерами 0, 1 и 2.
+    Программа не знает и не должна знать, что за ними: экран, файл или другая программа.
+    Именно поэтому маленькие утилиты так легко соединяются между собой.</p>
+    <div class="card term mono "><div><span class="pr">$</span> <span class="cm">ls /etc /nosuchdir</span></div><div class="ot">ls: невозможно получить доступ к '/nosuchdir': Нет такого файла или каталога</div><div class="ot">/etc:</div><div class="ot">hosts  passwd  nginx</div><div><span class="pr">$</span> <span class="cm">ls /etc /nosuchdir 2> errors.txt</span></div><div class="cmt"># ошибка ушла в файл, полезный вывод остался на экране</div></div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Перенаправление" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Потоки и конвейеры</div><h2>Перенаправление ввода и вывода</h2></header>
+<div class="two">
+  <div class="tw card"><table class="tbl "><thead><tr><th>Запись</th><th>Что делает</th></tr></thead><tbody><tr data-s="1"><th>команда &gt; файл</th><td class="">Записать вывод в файл, стерев прежнее содержимое.</td></tr><tr data-s="2"><th>команда &gt;&gt; файл</th><td class="">Дописать вывод в конец файла.</td></tr><tr data-s="3"><th>команда 2&gt; файл</th><td class="">Перенаправить только поток ошибок.</td></tr><tr data-s="4"><th>команда &gt; файл 2&gt;&amp;1</th><td class="">И результат, и ошибки в один файл.</td></tr><tr data-s="5"><th>команда &amp;&gt; файл</th><td class="">То же короче (bash).</td></tr><tr data-s="6"><th>команда &lt; файл</th><td class="">Взять ввод из файла вместо клавиатуры.</td></tr><tr data-s="7"><th>команда 2&gt; /dev/null</th><td class="">Выбросить ошибки: /dev/null — «чёрная дыра».</td></tr></tbody></table></div>
+  <div class="vstack">
+    <div class="card term mono "><div><span class="pr">$</span> <span class="cm">ip a > net-state.txt</span></div><div><span class="pr">$</span> <span class="cm">date >> net-state.txt</span></div><div class="cmt"># первая команда создала файл, вторая дописала строку</div><div><span class="pr">$</span> <span class="cm">sort < names.txt > sorted.txt</span></div><div><span class="pr">$</span> <span class="cm">find / -name '*.conf' 2> /dev/null | wc -l</span></div><div class="ot">412</div><div class="cmt"># без 2> /dev/null экран забьют сообщения «отказано в доступе»</div></div>
+    <div class="callout ">Разница между <span class="mono">&gt;</span> и <span class="mono">&gt;&gt;</span> стоит данных: первая форма молча затирает файл. Привычка писать <span class="mono">&gt;&gt;</span> для журналов избавляет от неприятных сюрпризов.</div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Конвейер" data-anim="loop"><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Потоки и конвейеры</div><h2>Конвейер: вывод одной команды на вход другой</h2></header>
+<div class="two">
+  <div class="card dgcard " data-scene="pipe"><svg class="dg" viewBox="0 0 1000 320" role="img"><rect data-id="p1" x="30" y="70" width="250" height="90" rx="12" class="sbx "/><text class="bxt" x="155.0" y="108.0" text-anchor="middle" font-size="20">cat access.log</text><text class="stx" x="155.0" y="135.0" text-anchor="middle">читает файл</text><rect data-id="p2" x="375" y="70" width="250" height="90" rx="12" class="sbx "/><text class="bxt" x="500.0" y="108.0" text-anchor="middle" font-size="20">grep '404'</text><text class="stx" x="500.0" y="135.0" text-anchor="middle">фильтрует строки</text><rect data-id="p3" x="720" y="70" width="250" height="90" rx="12" class="sbx "/><text class="bxt" x="845.0" y="108.0" text-anchor="middle" font-size="20">wc -l</text><text class="stx" x="845.0" y="135.0" text-anchor="middle">считает строки</text><line class="lnk" x1="286" y1="115" x2="355" y2="115"/><polygon points="369,115 353,107 353,123" class="arh"/><line class="lnk" x1="631" y1="115" x2="700" y2="115"/><polygon points="714,115 698,107 698,123" class="arh"/><text class="stx" x="327" y="90" text-anchor="middle">канал</text><text class="stx" x="672" y="90" text-anchor="middle">канал</text><g data-id="k1" class="an"><rect x="-60.0" y="-17.0" width="120" height="34" rx="8" class="pk-s" transform="translate(327 155)"/><text class="pkt" x="327" y="161" text-anchor="middle" font-size="17">12 000</text></g><g data-id="k2" class="an"><rect x="-60.0" y="-17.0" width="120" height="34" rx="8" class="pk-m" transform="translate(672 155)"/><text class="pkt" x="672" y="161" text-anchor="middle" font-size="17">87</text></g><g data-id="k3" class="an"><rect x="-80.0" y="-20.0" width="160" height="40" rx="8" class="pk-p" transform="translate(845 215)"/><text class="pkt" x="845" y="221" text-anchor="middle" font-size="20">87</text></g><text data-id="pcap" class="capm" x="500" y="290" text-anchor="middle"></text></svg></div>
+  <div class="vstack">
+    <p class="p sm">Символ <span class="mono">|</span> соединяет стандартный вывод левой команды
+    со стандартным вводом правой. Программы запускаются одновременно, данные идут потоком,
+    промежуточные файлы не создаются.</p>
+    <ol class="steps "><li data-s="1"><span class="badge">1</span><div>Каждая утилита делает одну вещь и делает её хорошо.</div></li><li data-s="2"><span class="badge">2</span><div>Результат — текст, который можно передать дальше.</div></li><li data-s="3"><span class="badge">3</span><div>Сложная задача собирается из простых кирпичей прямо в командной строке.</div></li><li data-s="4"><span class="badge">4</span><div>Конвейер можно продолжать сколько угодно: разбирать журнал в три-четыре звена — норма.</div></li></ol>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Фильтры" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Потоки и конвейеры</div><h2>Утилиты-фильтры и примеры конвейеров</h2></header>
+<div class="two">
+  <div class="g2 cmdg"><article class="card cmdc" data-s="1"><div class="mono cmdn">sort / sort -n / -r</div><p>Сортировка по алфавиту, по числам, в обратном порядке.</p></article><article class="card cmdc" data-s="2"><div class="mono cmdn">uniq -c</div><p>Схлопнуть одинаковые соседние строки и посчитать их.</p></article><article class="card cmdc" data-s="3"><div class="mono cmdn">wc -l / -w / -c</div><p>Сколько строк, слов, символов.</p></article><article class="card cmdc" data-s="4"><div class="mono cmdn">cut -d: -f1</div><p>Вырезать поле из строки с разделителем.</p></article><article class="card cmdc" data-s="5"><div class="mono cmdn">awk '{print $1, $9}'</div><p>Работа по столбцам: печать, фильтры, арифметика.</p></article><article class="card cmdc" data-s="6"><div class="mono cmdn">sed 's/old/new/g'</div><p>Потоковая замена текста.</p></article><article class="card cmdc" data-s="7"><div class="mono cmdn">tee файл</div><p>Раздвоить поток: и на экран, и в файл.</p></article><article class="card cmdc" data-s="8"><div class="mono cmdn">xargs</div><p>Превратить строки ввода в аргументы другой команды.</p></article></div>
+  <div class="vstack">
+    <div class="card term mono "><div><span class="pr">$</span> <span class="cm">cut -d: -f1 /etc/passwd | sort | head -5</span></div><div class="ot">avahi</div><div class="ot">backup</div><div class="ot">bin</div><div class="ot">daemon</div><div class="ot">games</div><div><span class="pr">$</span> <span class="cm">awk '{print $1}' access.log | sort | uniq -c | sort -nr | head -3</span></div><div class="ot">  482 10.25.200.60</div><div class="ot">  311 10.25.200.71</div><div class="ot">   96 192.168.1.14</div><div class="cmt"># три самых активных IP-адреса в журнале веб-сервера</div><div><span class="pr">$</span> <span class="cm">ps aux | grep nginx | grep -v grep | wc -l</span></div><div class="ot">5</div></div>
+    <div class="callout ">Разбор строки <span class="mono">awk</span>: взять первое поле каждой строки, отсортировать, посчитать повторы, отсортировать по убыванию числа, взять три первых. Ровно так читаются любые конвейеры — слева направо, по звеньям.</div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Права: чтение" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Права доступа</div><h2>Как читать права в выводе ls -l</h2></header>
+<div class="vstack">
+  <div class="card dgcard " data-scene="perm"><svg class="dg" viewBox="0 0 1000 266" role="img"><rect data-id="gO" x="120" y="34" width="180" height="76" rx="12" class="sel"/><rect data-id="gG" x="350" y="34" width="180" height="76" rx="12" class="sel"/><rect data-id="gA" x="580" y="34" width="180" height="76" rx="12" class="sel"/><text class="permc" x="60" y="90" text-anchor="middle">-</text><text class="permc" x="150" y="90" text-anchor="middle">r</text><text class="permc" x="210" y="90" text-anchor="middle">w</text><text class="permc" x="270" y="90" text-anchor="middle">x</text><text class="permc" x="380" y="90" text-anchor="middle">r</text><text class="permc" x="440" y="90" text-anchor="middle">-</text><text class="permc" x="500" y="90" text-anchor="middle">x</text><text class="permc" x="610" y="90" text-anchor="middle">r</text><text class="permc" x="670" y="90" text-anchor="middle">-</text><text class="permc" x="730" y="90" text-anchor="middle">-</text><text class="stx" x="210" y="146" text-anchor="middle">владелец</text><text class="stx" x="440" y="146" text-anchor="middle">группа</text><text class="stx" x="670" y="146" text-anchor="middle">остальные</text><text class="stx dim" x="60" y="146" text-anchor="middle">файл</text><text data-id="n1" class="permn" x="210" y="215" text-anchor="middle">7</text><text data-id="n2" class="permn" x="440" y="215" text-anchor="middle">5</text><text data-id="n3" class="permn" x="670" y="215" text-anchor="middle">4</text><text class="stx dim" x="860" y="90" text-anchor="middle">r = 4</text><text class="stx dim" x="860" y="122" text-anchor="middle">w = 2</text><text class="stx dim" x="860" y="154" text-anchor="middle">x = 1</text><text data-id="mcap" class="capm" x="440" y="252" text-anchor="middle"></text></svg></div>
+  <div class="two">
+    <div class="card term mono "><div><span class="pr">$</span> <span class="cm">ls -l script.sh</span></div><div class="ot">-rwxr-xr-- 1 student developers 1284 мая 14 10:02 script.sh</div><div class="cmt"># владелец student, группа developers, размер 1284 байта</div></div>
+    <ol class="steps "><li data-s="1"><span class="badge">1</span><div>Первый символ — тип объекта: «-» файл, «d» каталог, «l» символьная ссылка.</div></li><li data-s="2"><span class="badge">2</span><div>Дальше три тройки: права владельца, группы и всех остальных.</div></li><li data-s="3"><span class="badge">3</span><div>r = 4 (чтение), w = 2 (запись), x = 1 (исполнение); внутри тройки они складываются.</div></li><li data-s="4"><span class="badge">4</span><div>Для каталога x означает право войти в него, а r — право прочитать список файлов.</div></li></ol>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="chmod" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Права доступа</div><h2>Изменение прав: chmod</h2></header>
+<div class="two">
+  <div class="tw card"><table class="tbl "><thead><tr><th>Команда</th><th>Результат</th><th>Когда применяется</th></tr></thead><tbody><tr data-s="1"><th>chmod 755 file</th><td class="mono">rwxr-xr-x</td><td class="">Классика для программ и скриптов: владелец может всё, остальные читают и запускают.</td></tr><tr data-s="2"><th>chmod 644 file</th><td class="mono">rw-r--r--</td><td class="">Обычный файл с данными: владелец правит, остальные читают.</td></tr><tr data-s="3"><th>chmod 600 file</th><td class="mono">rw-------</td><td class="">Личные данные и ключи: доступ только владельцу.</td></tr><tr data-s="4"><th>chmod 700 dir</th><td class="mono">rwx------</td><td class="">Каталог виден только владельцу.</td></tr><tr data-s="5"><th>chmod +x script.sh</th><td class="mono">добавить x</td><td class="">Символьная форма: дать право исполнения всем категориям.</td></tr><tr data-s="6"><th>chmod u+w,go-rwx f</th><td class="mono">точечно</td><td class="">u — владелец, g — группа, o — остальные, a — все сразу.</td></tr><tr data-s="7"><th>chmod -R 755 dir</th><td class="mono">рекурсивно</td><td class="">Применить ко всему дереву каталога. Пользоваться осмотрительно.</td></tr></tbody></table></div>
+  <div class="vstack">
+    <div class="card term mono "><div><span class="pr">$</span> <span class="cm">chmod 754 script.sh</span></div><div><span class="pr">$</span> <span class="cm">ls -l script.sh</span></div><div class="ot">-rwxr-xr-- 1 student developers 1284 мая 14 10:02 script.sh</div><div><span class="pr">$</span> <span class="cm">./script.sh</span></div><div class="ot">Проверка связи выполнена</div><div><span class="pr">$</span> <span class="cm">chmod 600 ~/.ssh/id_ed25519</span></div><div class="cmt"># ssh откажется работать с ключом, доступным другим пользователям</div></div>
+    <div class="callout ">Числовая форма задаёт права целиком, символьная — добавляет или снимает отдельные биты. Для скриптов почти всегда нужен <span class="mono">755</span>, для ключей — только <span class="mono">600</span>.</div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Владельцы" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Права доступа</div><h2>Владелец, группа и особые биты</h2></header>
+<div class="two">
+  <div class="g2 cmdg"><article class="card cmdc" data-s="1"><div class="mono cmdn">chown user file</div><p>Сменить владельца файла. Требует прав root.</p></article><article class="card cmdc" data-s="2"><div class="mono cmdn">chown user:group file</div><p>Сменить владельца и группу одной командой.</p></article><article class="card cmdc" data-s="3"><div class="mono cmdn">chgrp developers file</div><p>Сменить только группу.</p></article><article class="card cmdc" data-s="4"><div class="mono cmdn">umask 022</div><p>Маска: какие права <b>снимаются</b> у новых файлов. 022 даёт 644 файлам и 755 каталогам.</p></article><article class="card cmdc" data-s="5"><div class="mono cmdn">chmod u+s program</div><p>SUID: программа выполняется с правами своего владельца. Так работает passwd.</p></article><article class="card cmdc" data-s="6"><div class="mono cmdn">chmod g+s dir</div><p>SGID на каталоге: новые файлы наследуют его группу — удобно для общих проектов.</p></article><article class="card cmdc" data-s="7"><div class="mono cmdn">chmod +t /tmp</div><p>Sticky bit: в общем каталоге удалять файл может только его владелец.</p></article><article class="card cmdc" data-s="8"><div class="mono cmdn">getfacl / setfacl</div><p>Расширенные списки доступа, когда трёх категорий не хватает.</p></article></div>
+  <div class="vstack">
+    <div class="card term mono "><div><span class="pr">$</span> <span class="cm">ls -l /usr/bin/passwd</span></div><div class="ot">-rwsr-xr-x 1 root root 68208 мар 23 12:40 /usr/bin/passwd</div><div class="cmt"># буква s вместо x — установлен бит SUID</div><div><span class="pr">$</span> <span class="cm">ls -ld /tmp</span></div><div class="ot">drwxrwxrwt 13 root root 4096 мая 14 10:15 /tmp</div><div class="cmt"># буква t в конце — sticky bit</div><div><span class="pr">$</span> <span class="cm">sudo chown -R www-data:www-data /var/www/site</span></div></div>
+    <div class="callout warn">SUID-программы — излюбленная цель атак: ошибка в такой программе даёт злоумышленнику права root. Найти все SUID-файлы в системе: <span class="mono">find / -perm -4000 -type f 2&gt;/dev/null</span>.</div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Пользователи" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Пользователи</div><h2>Пользователи, группы и sudo</h2></header>
+<div class="two">
+  <div class="card term mono "><div><span class="pr">$</span> <span class="cm">id</span></div><div class="ot">uid=1000(student) gid=1000(student) группы=1000(student),27(sudo),1001(developers)</div><div><span class="pr">$</span> <span class="cm">grep student /etc/passwd</span></div><div class="ot">student:x:1000:1000:Студент:/home/student:/bin/bash</div><div class="cmt"># имя : пароль(x в /etc/shadow) : UID : GID : описание : дом : оболочка</div><div><span class="pr">$</span> <span class="cm">sudo useradd -m -s /bin/bash ivanov</span></div><div><span class="pr">$</span> <span class="cm">sudo passwd ivanov</span></div><div><span class="pr">$</span> <span class="cm">sudo usermod -aG developers ivanov</span></div><div class="cmt"># ключ -aG добавляет группу, не стирая прежние</div></div>
+  <div class="vstack">
+    <div class="g2"><article class="card fc c-pink" data-s="1"><div class="ftag mono">root, UID 0</div><p>Суперпользователь: права доступа для него не проверяются. Работать под ним постоянно нельзя.</p></article><article class="card fc c-sky" data-s="2"><div class="ftag mono">Системные, UID &lt; 1000</div><p>Учётные записи служб: www-data, syslog, nobody. Без права входа в систему.</p></article><article class="card fc c-mint" data-s="3"><div class="ftag mono">Обычные, UID ≥ 1000</div><p>Живые пользователи с домашним каталогом и оболочкой.</p></article><article class="card fc c-lilac" data-s="4"><div class="ftag mono">sudo</div><p>Выполнить одну команду с правами root; кто и что может — в /etc/sudoers, правится через visudo.</p></article></div>
+    <div class="callout ">Принцип наименьших привилегий: повышаем права только там, где без этого не обойтись. Каждое применение sudo попадает в <span class="mono">/var/log/auth.log</span>.</div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Процессы" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Процессы</div><h2>Процессы: откуда они берутся</h2></header>
+<div class="two">
+  <div class="card dgcard " data-scene="proc"><svg class="dg" viewBox="0 0 1000 470" role="img"><rect x="380" y="20" width="240" height="64" rx="12" class="sbx "/><text class="bxt" x="500.0" y="45.0" text-anchor="middle" font-size="20">systemd</text><text class="stx" x="500.0" y="72.0" text-anchor="middle">PID 1</text><line class="lnk" x1="500" y1="84" x2="500" y2="106"/><polygon points="500,120 492,104 508,104" class="arh"/><rect data-id="pb" x="380" y="120" width="240" height="64" rx="12" class="sbx "/><text class="bxt" x="500.0" y="145.0" text-anchor="middle" font-size="20">bash</text><text class="stx" x="500.0" y="172.0" text-anchor="middle">PID 1420</text><path class="lnk" d="M500 184 L500 210 L300 210 L300 240"/><polygon points="300,244 292,228 308,228" class="arh"/><rect data-id="pf" x="180" y="244" width="240" height="64" rx="12" class="sbx "/><text class="bxt" x="300.0" y="269.0" text-anchor="middle" font-size="20">копия bash</text><text class="stx" x="300.0" y="296.0" text-anchor="middle">PID 1533</text><line class="lnk" x1="300" y1="308" x2="300" y2="338"/><polygon points="300,352 292,336 308,336" class="arh"/><rect data-id="pl" x="180" y="352" width="240" height="64" rx="12" class="sbx "/><text class="bxt" x="300.0" y="377.0" text-anchor="middle" font-size="20">ls -l</text><text class="stx" x="300.0" y="404.0" text-anchor="middle">PID 1533</text><rect data-id="pk" x="600" y="300" width="300" height="64" rx="12" class="sbx "/><text class="bxt" x="750.0" y="325.0" text-anchor="middle" font-size="19">kill -TERM 1533</text><text class="stx" x="750.0" y="352.0" text-anchor="middle">сигнал процессу</text><path class="lnk" d="M596 332 L440 332"/><polygon points="424,332 440,324 440,340" class="arh"/><text data-id="prcap" class="capm" x="460" y="450" text-anchor="middle"></text></svg></div>
+  <div class="vstack">
+    <p class="p sm"><b>Процесс</b> — запущенная программа со своей памятью, открытыми файлами и правами.
+    Каждый получает номер <b>PID</b> и помнит номер родителя <b>PPID</b>.</p>
+    <ol class="steps "><li data-s="1"><span class="badge">1</span><div>Новый процесс появляется только копированием существующего — системный вызов fork().</div></li><li data-s="2"><span class="badge">2</span><div>Затем копия заменяет свой код нужной программой — вызов exec().</div></li><li data-s="3"><span class="badge">3</span><div>Родитель ждёт завершения потомка и забирает его код выхода — wait().</div></li><li data-s="4"><span class="badge">4</span><div>Процесс с PID 1 (systemd) усыновляет всех, кто остался без родителя.</div></li></ol>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Наблюдение" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Процессы</div><h2>Кто сейчас работает: ps, top, htop</h2></header>
+<div class="two">
+  <div class="card term mono "><div><span class="pr">$</span> <span class="cm">ps aux | head -4</span></div><div class="ot">USER  PID %CPU %MEM    VSZ   RSS TTY  STAT START   TIME COMMAND</div><div class="ot">root    1  0.0  0.4 167844 11592 ?    Ss   09:21   0:03 /sbin/init</div><div class="ot">root  842  0.1  1.2 921344 48120 ?    Ssl  09:21   0:11 /usr/sbin/NetworkManager</div><div class="ot">www-. 1190  0.0  0.6 142208 24980 ?    S    09:22   0:00 nginx: worker process</div><div><span class="pr">$</span> <span class="cm">ps -ef --forest | grep -A2 sshd</span></div><div><span class="pr">$</span> <span class="cm">top -o %MEM</span></div><div class="cmt"># интерактивно: k — сигнал процессу, M — сортировка по памяти, q — выход</div></div>
+  <div class="g2 cmdg"><article class="card cmdc" data-s="1"><div class="mono cmdn">ps aux</div><p>Все процессы системы с загрузкой процессора и памятью.</p></article><article class="card cmdc" data-s="2"><div class="mono cmdn">ps -ef --forest</div><p>Дерево процессов: видно, кто кого породил.</p></article><article class="card cmdc" data-s="3"><div class="mono cmdn">pgrep -a nginx</div><p>Найти PID по имени программы.</p></article><article class="card cmdc" data-s="4"><div class="mono cmdn">top / htop</div><p>Живая картина нагрузки, обновляется каждые несколько секунд.</p></article><article class="card cmdc" data-s="5"><div class="mono cmdn">free -h</div><p>Сколько памяти занято и сколько в кеше.</p></article><article class="card cmdc" data-s="6"><div class="mono cmdn">uptime</div><p>Средняя нагрузка за 1, 5 и 15 минут.</p></article><article class="card cmdc" data-s="7"><div class="mono cmdn">lsof -p PID</div><p>Какие файлы и сокеты открыл процесс.</p></article><article class="card cmdc" data-s="8"><div class="mono cmdn">kill -l</div><p>Список доступных сигналов.</p></article></div>
+</div></div></div></section><section class="slide tight" data-label="Сигналы" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Процессы</div><h2>Завершение процессов и сигналы</h2></header>
+<div class="two">
+  <div class="tw card"><table class="tbl "><thead><tr><th>Сигнал</th><th>Номер</th><th>Смысл</th></tr></thead><tbody><tr data-s="1"><th>SIGTERM</th><td class="mono">15</td><td class="">Вежливая просьба завершиться. Программа успевает закрыть файлы. Сигнал по умолчанию у kill.</td></tr><tr data-s="2"><th>SIGKILL</th><td class="mono">9</td><td class="">Снятие силой средствами ядра. Перехватить нельзя, данные могут не сохраниться.</td></tr><tr data-s="3"><th>SIGHUP</th><td class="mono">1</td><td class="">Исторически «обрыв терминала», сегодня — команда перечитать конфигурацию.</td></tr><tr data-s="4"><th>SIGINT</th><td class="mono">2</td><td class="">Прерывание с клавиатуры — то, что посылает Ctrl+C.</td></tr><tr data-s="5"><th>SIGSTOP / SIGCONT</th><td class="mono">19 / 18</td><td class="">Приостановить и продолжить выполнение. Ctrl+Z посылает SIGTSTP.</td></tr></tbody></table></div>
+  <div class="vstack">
+    <div class="card term mono "><div><span class="pr">$</span> <span class="cm">pgrep -a python3</span></div><div class="ot">2451 python3 loader.py</div><div><span class="pr">$</span> <span class="cm">kill 2451</span></div><div class="cmt"># то же, что kill -15: просим завершиться</div><div><span class="pr">$</span> <span class="cm">kill -9 2451</span></div><div class="cmt"># если не отреагировал за несколько секунд</div><div><span class="pr">$</span> <span class="cm">pkill -f loader.py</span></div><div class="cmt"># по имени и аргументам, без поиска PID</div><div><span class="pr">$</span> <span class="cm">kill -HUP $(pgrep nginx | head -1)</span></div><div class="cmt"># перечитать конфигурацию без остановки службы</div></div>
+    <div class="callout ">Начинайте всегда с <span class="mono">kill</span> без ключей. <span class="mono">kill -9</span> — крайняя мера: процесс не успевает сбросить буферы на диск и закрыть соединения.</div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Фоновые задания" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Процессы</div><h2>Фоновые задания и длинные операции</h2></header>
+<div class="two">
+  <div class="g2 cmdg"><article class="card cmdc" data-s="1"><div class="mono cmdn">команда &amp;</div><p>Запустить в фоне, вернув приглашение оболочки.</p></article><article class="card cmdc" data-s="2"><div class="mono cmdn">Ctrl+Z</div><p>Приостановить текущую команду.</p></article><article class="card cmdc" data-s="3"><div class="mono cmdn">jobs</div><p>Список заданий текущей оболочки.</p></article><article class="card cmdc" data-s="4"><div class="mono cmdn">fg %1 / bg %1</div><p>Вернуть задание на передний план / продолжить в фоне.</p></article><article class="card cmdc" data-s="5"><div class="mono cmdn">nohup команда &amp;</div><p>Не завершать процесс при закрытии терминала; вывод в nohup.out.</p></article><article class="card cmdc" data-s="6"><div class="mono cmdn">screen / tmux</div><p>Отсоединяемые сессии: соединение оборвалось — работа продолжается.</p></article><article class="card cmdc" data-s="7"><div class="mono cmdn">watch -n 2 команда</div><p>Повторять команду каждые две секунды и показывать результат.</p></article><article class="card cmdc" data-s="8"><div class="mono cmdn">time команда</div><p>Сколько реально заняло выполнение.</p></article></div>
+  <div class="vstack">
+    <div class="card term mono "><div><span class="pr">$</span> <span class="cm">tar czf archive.tar.gz /var/www &</span></div><div class="ot">[1] 3184</div><div><span class="pr">$</span> <span class="cm">jobs</span></div><div class="ot">[1]+  Запущен  tar czf archive.tar.gz /var/www &</div><div><span class="pr">$</span> <span class="cm">fg %1</span></div><div class="cmt"># вернули на передний план</div><div><span class="pr">$</span> <span class="cm">nohup ./long-task.sh > task.log 2>&1 &</span></div><div class="ot">[2] 3251</div><div class="cmt"># теперь можно закрыть ssh-сессию — задача доживёт до конца</div></div>
+    <div class="callout ">При работе на удалённом сервере длительные операции запускают в <span class="mono">tmux</span>: разрыв ssh-соединения не прервёт установку или миграцию базы данных.</div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="systemd" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Службы</div><h2>Службы и systemd</h2></header>
+<div class="two">
+  <div class="card term mono "><div><span class="pr">$</span> <span class="cm">systemctl status nginx</span></div><div class="ot">● nginx.service - A high performance web server</div><div class="ot">     Loaded: loaded (/lib/systemd/system/nginx.service; enabled)</div><div class="ot">     Active: active (running) since Tue 2026-05-14 09:22:03 MSK; 1h 4min ago</div><div class="ot">   Main PID: 1188 (nginx)</div><div class="ot">      Tasks: 5 (limit: 18930)</div><div><span class="pr">$</span> <span class="cm">sudo systemctl restart nginx</span></div><div><span class="pr">$</span> <span class="cm">sudo systemctl enable nginx</span></div><div class="cmt"># enable — стартовать автоматически при загрузке, start — прямо сейчас</div></div>
+  <div class="g2 cmdg"><article class="card cmdc" data-s="1"><div class="mono cmdn">systemctl status служба</div><p>Состояние, PID, последние строки журнала.</p></article><article class="card cmdc" data-s="2"><div class="mono cmdn">systemctl start / stop</div><p>Запустить или остановить прямо сейчас.</p></article><article class="card cmdc" data-s="3"><div class="mono cmdn">systemctl restart / reload</div><p>Перезапустить полностью или перечитать конфигурацию.</p></article><article class="card cmdc" data-s="4"><div class="mono cmdn">systemctl enable / disable</div><p>Включить или выключить автозапуск при загрузке.</p></article><article class="card cmdc" data-s="5"><div class="mono cmdn">systemctl list-units --type=service</div><p>Все загруженные службы и их состояние.</p></article><article class="card cmdc" data-s="6"><div class="mono cmdn">systemctl --failed</div><p>Что не смогло запуститься — первый шаг при разборе проблем.</p></article><article class="card cmdc" data-s="7"><div class="mono cmdn">systemctl daemon-reload</div><p>Перечитать файлы юнитов после их правки.</p></article><article class="card cmdc" data-s="8"><div class="mono cmdn">/etc/systemd/system/*.service</div><p>Где лежат собственные юниты администратора.</p></article></div>
+</div></div></div></section><section class="slide tight" data-label="Журналы" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Службы</div><h2>Журналы: journalctl и /var/log</h2></header>
+<div class="two">
+  <div class="card term mono "><div><span class="pr">$</span> <span class="cm">journalctl -u nginx -n 5 --no-pager</span></div><div class="ot">мая 14 09:22:03 srv-lab-01 systemd[1]: Starting A high performance web server...</div><div class="ot">мая 14 09:22:03 srv-lab-01 systemd[1]: Started A high performance web server.</div><div><span class="pr">$</span> <span class="cm">journalctl -b -p err</span></div><div class="cmt"># ошибки с момента текущей загрузки</div><div><span class="pr">$</span> <span class="cm">journalctl -f</span></div><div class="cmt"># следить за журналом в реальном времени</div><div><span class="pr">$</span> <span class="cm">tail -f /var/log/auth.log | grep 'Failed password'</span></div><div class="ot">May 14 10:31:02 srv-lab-01 sshd[4120]: Failed password for root from 45.9.148.2 port 51244</div></div>
+  <div class="vstack">
+    <div class="tw card"><table class="tbl "><thead><tr><th>Команда или файл</th><th>Что покажет</th></tr></thead><tbody><tr data-s="1"><th>journalctl -u служба</th><td class="">Журнал конкретной службы.</td></tr><tr data-s="2"><th>journalctl -b / -b -1</th><td class="">С текущей загрузки / с предыдущей.</td></tr><tr data-s="3"><th>journalctl --since '1 hour ago'</th><td class="">За интервал времени.</td></tr><tr data-s="4"><th>journalctl -p err</th><td class="">Только сообщения уровня «ошибка» и выше.</td></tr><tr data-s="5"><th>/var/log/syslog, messages</th><td class="">Общий системный журнал.</td></tr><tr data-s="6"><th>/var/log/auth.log, secure</th><td class="">Входы в систему, sudo, ssh.</td></tr><tr data-s="7"><th>dmesg -T</th><td class="">Сообщения ядра: диски, драйверы, сетевые карты.</td></tr></tbody></table></div>
+    <div class="callout ">Разбор любой неполадки начинается одинаково: <span class="mono">systemctl status</span> — что со службой, <span class="mono">journalctl -u</span> — что она написала перед тем, как сломаться.</div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Пакеты" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Пакеты</div><h2>Менеджеры пакетов</h2></header>
+<div class="two">
+  <div class="card dgcard " data-scene="pkg"><svg class="dg" viewBox="0 0 1000 400" role="img"><rect x="40" y="40" width="250" height="100" rx="12" class="sbx "/><text class="bxt" x="165.0" y="83.0" text-anchor="middle" font-size="20">Репозиторий</text><text class="stx" x="165.0" y="110.0" text-anchor="middle">deb.debian.org</text><rect data-id="r1" x="380" y="40" width="240" height="100" rx="12" class="sbx "/><text class="bxt" x="500.0" y="83.0" text-anchor="middle" font-size="20">Индекс пакетов</text><text class="stx" x="500.0" y="110.0" text-anchor="middle">apt update</text><rect data-id="r2" x="710" y="40" width="250" height="100" rx="12" class="sbx "/><text class="bxt" x="835.0" y="83.0" text-anchor="middle" font-size="20">Зависимости</text><text class="stx" x="835.0" y="110.0" text-anchor="middle">что ещё нужно</text><rect data-id="r3" x="710" y="220" width="250" height="100" rx="12" class="sbx "/><text class="bxt" x="835.0" y="263.0" text-anchor="middle" font-size="20">Установка</text><text class="stx" x="835.0" y="290.0" text-anchor="middle">dpkg -i</text><rect data-id="r4" x="380" y="220" width="240" height="100" rx="12" class="sbx "/><text class="bxt" x="500.0" y="263.0" text-anchor="middle" font-size="20">Загрузка .deb</text><text class="stx" x="500.0" y="290.0" text-anchor="middle">в /var/cache/apt</text><line class="lnk" x1="296" y1="90" x2="360" y2="90"/><polygon points="374,90 358,82 358,98" class="arh"/><line class="lnk" x1="626" y1="90" x2="690" y2="90"/><polygon points="704,90 688,82 688,98" class="arh"/><line class="lnk" x1="835" y1="140" x2="835" y2="206"/><polygon points="835,220 827,204 843,204" class="arh"/><path class="lnk" d="M704 270 L626 270"/><polygon points="610,270 626,262 626,278" class="arh"/><text data-id="gcap" class="capm" x="340" y="370" text-anchor="middle"></text><g data-id="gp" class="an"><rect x="-90.0" y="-20.0" width="180" height="40" rx="8" class="pk-p" transform="translate(165 90)"/><text class="pkt" x="165" y="96" text-anchor="middle" font-size="17">apt install nginx</text></g></svg></div>
+  <div class="vstack">
+    <p class="p sm">Программы ставят не скачиванием установщика с сайта, а из <b>репозитория</b> —
+    подписанного хранилища проверенных пакетов. Менеджер сам разрешает зависимости и умеет
+    удалять установленное без следов.</p>
+    <div class="tw card"><table class="tbl "><thead><tr><th>Семейство</th><th>Команды</th></tr></thead><tbody><tr data-s="1"><th>Debian, Ubuntu</th><td class="mono">apt update, apt install пакет, apt remove, apt search</td></tr><tr data-s="2"><th>RHEL, Fedora</th><td class="mono">dnf check-update, dnf install, dnf remove, dnf search</td></tr><tr data-s="3"><th>Arch Linux</th><td class="mono">pacman -Syu, pacman -S пакет, pacman -R</td></tr><tr data-s="4"><th>Низкий уровень</th><td class="mono">dpkg -i файл.deb, rpm -i файл.rpm — без разрешения зависимостей</td></tr><tr data-s="5"><th>Универсальные</th><td class="mono">snap install, flatpak install — пакет вместе со всем окружением</td></tr></tbody></table></div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Сеть: интерфейсы" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Сеть</div><h2>Сетевые интерфейсы и адреса</h2></header>
+<div class="two">
+  <div class="card term mono "><div><span class="pr">$</span> <span class="cm">ip -br a</span></div><div class="ot">lo               UNKNOWN        127.0.0.1/8 ::1/128</div><div class="ot">enp3s0           UP             10.25.200.60/24 fe80::2e0:4cff:fe68:1a2b/64</div><div class="ot">wlp2s0           DOWN</div><div><span class="pr">$</span> <span class="cm">ip a show enp3s0</span></div><div class="ot">2: enp3s0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 state UP</div><div class="ot">    link/ether 00:e0:4c:68:1a:2b brd ff:ff:ff:ff:ff:ff</div><div class="ot">    inet 10.25.200.60/24 brd 10.25.200.255 scope global dynamic enp3s0</div><div class="cmt"># lo — петлевой интерфейс, enp3s0 — проводной, wlp2s0 — беспроводной</div></div>
+  <div class="vstack">
+    <ol class="steps "><li data-s="1"><span class="badge">1</span><div><b>state UP</b> — интерфейс включён; <b>LOWER_UP</b> — кабель подключён и линк есть.</div></li><li data-s="2"><span class="badge">2</span><div><b>link/ether</b> — MAC-адрес, адрес канального уровня.</div></li><li data-s="3"><span class="badge">3</span><div><b>inet 10.25.200.60/24</b> — адрес IPv4 и маска подсети.</div></li><li data-s="4"><span class="badge">4</span><div><b>dynamic</b> — адрес получен по DHCP, а не задан вручную.</div></li><li data-s="5"><span class="badge">5</span><div><b>mtu 1500</b> — максимальный размер полезной нагрузки кадра.</div></li></ol>
+    <div class="callout ">Команды <span class="mono">ifconfig</span>, <span class="mono">route</span> и <span class="mono">netstat</span> устарели и в новых дистрибутивах не ставятся. Современная замена — единая утилита <span class="mono">ip</span> и <span class="mono">ss</span>.</div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Сеть: настройка" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Сеть</div><h2>Маршруты, DNS и настройка адреса</h2></header>
+<div class="two">
+  <div class="card term mono "><div><span class="pr">$</span> <span class="cm">ip r</span></div><div class="ot">default via 10.25.200.1 dev enp3s0 proto dhcp metric 100</div><div class="ot">10.25.200.0/24 dev enp3s0 proto kernel scope link src 10.25.200.60</div><div class="cmt"># первая строка — шлюз по умолчанию, вторая — своя подсеть</div><div><span class="pr">$</span> <span class="cm">resolvectl status | grep 'DNS Server'</span></div><div class="ot">Current DNS Server: 10.25.200.1</div><div><span class="pr">$</span> <span class="cm">sudo ip a add 192.168.50.10/24 dev enp3s0</span></div><div class="cmt"># временно, до перезагрузки: постоянная настройка — в конфигурации</div></div>
+  <div class="vstack">
+    <div class="tw card"><table class="tbl "><thead><tr><th>Механизм</th><th>Где настраивается</th><th>Где встречается</th></tr></thead><tbody><tr data-s="1"><th>NetworkManager</th><td class="mono">nmcli con show, nmcli con mod</td><td class="">Рабочие станции и большинство дистрибутивов.</td></tr><tr data-s="2"><th>netplan</th><td class="mono">/etc/netplan/*.yaml, netplan apply</td><td class="">Серверная Ubuntu.</td></tr><tr data-s="3"><th>systemd-networkd</th><td class="mono">/etc/systemd/network/*.network</td><td class="">Минималистичные серверные установки.</td></tr><tr data-s="4"><th>/etc/resolv.conf</th><td class="mono">nameserver 10.25.200.1</td><td class="">Адреса DNS-серверов; обычно формируется автоматически.</td></tr><tr data-s="5"><th>/etc/hosts</th><td class="mono">10.25.200.71 srv-db</td><td class="">Статическое сопоставление имени и адреса, проверяется раньше DNS.</td></tr></tbody></table></div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Диагностика сети" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Сеть</div><h2>Диагностика: от кабеля до приложения</h2></header>
+<div class="two">
+  <div class="tw card"><table class="tbl "><thead><tr><th>Вопрос</th><th>Команда</th><th>Что выясняем</th></tr></thead><tbody><tr data-s="1"><th>Интерфейс поднят?</th><td class="mono">ip -br a</td><td class="">Состояние UP и наличие адреса.</td></tr><tr data-s="2"><th>Сосед отвечает?</th><td class="mono">ping -c 4 10.25.200.1</td><td class="">Доступность узла и время отклика.</td></tr><tr data-s="3"><th>Где теряется пакет?</th><td class="mono">traceroute 8.8.8.8 или mtr</td><td class="">Список маршрутизаторов на пути.</td></tr><tr data-s="4"><th>Имя разрешается?</th><td class="mono">dig example.com, nslookup</td><td class="">Работа DNS отдельно от остального.</td></tr><tr data-s="5"><th>Порт слушается?</th><td class="mono">ss -tulpn</td><td class="">Какие службы и на каких портах ждут соединений.</td></tr><tr data-s="6"><th>Соединение проходит?</th><td class="mono">curl -I http://srv/ , nc -zv host 443</td><td class="">Проверка на уровне приложения.</td></tr><tr data-s="7"><th>Что реально в сети?</th><td class="mono">sudo tcpdump -i enp3s0 port 53 -n</td><td class="">Перехват пакетов, когда остальное не объясняет.</td></tr></tbody></table></div>
+  <div class="vstack">
+    <div class="card term mono "><div><span class="pr">$</span> <span class="cm">ping -c 3 10.25.200.1</span></div><div class="ot">64 bytes from 10.25.200.1: icmp_seq=1 ttl=64 time=0.512 ms</div><div class="ot">3 packets transmitted, 3 received, 0% packet loss</div><div><span class="pr">$</span> <span class="cm">ss -tulpn | grep :80</span></div><div class="ot">tcp   LISTEN 0  511   0.0.0.0:80   0.0.0.0:*   users:((&quot;nginx&quot;,pid=1188,fd=6))</div><div><span class="pr">$</span> <span class="cm">dig +short example.com</span></div><div class="ot">93.184.216.34</div></div>
+    <div class="callout ">Диагностику ведут снизу вверх по модели OSI: сначала интерфейс и линк, затем адрес и маршрут, потом DNS, и только в конце само приложение. Так проблема локализуется за несколько команд.</div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="SSH" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Сеть</div><h2>Удалённый доступ: SSH</h2></header>
+<div class="two">
+  <div class="card term mono "><div><span class="pr">$</span> <span class="cm">ssh student@10.25.200.71</span></div><div class="ot">The authenticity of host '10.25.200.71' can't be established.</div><div class="ot">ED25519 key fingerprint is SHA256:9pV1x…  Are you sure you want to continue? yes</div><div><span class="pr">$</span> <span class="cm">ssh-keygen -t ed25519 -C 'student@lab'</span></div><div class="cmt"># создаст пару ~/.ssh/id_ed25519 (закрытый) и id_ed25519.pub (открытый)</div><div><span class="pr">$</span> <span class="cm">ssh-copy-id student@10.25.200.71</span></div><div class="cmt"># положит открытый ключ в ~/.ssh/authorized_keys на сервере</div><div><span class="pr">$</span> <span class="cm">scp report.md student@10.25.200.71:/home/student/</span></div><div><span class="pr">$</span> <span class="cm">rsync -avz labs/ student@10.25.200.71:~/labs/</span></div></div>
+  <div class="vstack">
+    <ol class="steps "><li data-s="1"><span class="badge">1</span><div>SSH шифрует сеанс и работает по TCP-порту 22.</div></li><li data-s="2"><span class="badge">2</span><div>При первом подключении клиент запоминает отпечаток сервера в ~/.ssh/known_hosts.</div></li><li data-s="3"><span class="badge">3</span><div>Аутентификация по ключам надёжнее пароля: закрытый ключ не покидает вашу машину.</div></li><li data-s="4"><span class="badge">4</span><div>Закрытый ключ обязан иметь права 600, иначе клиент откажется его использовать.</div></li><li data-s="5"><span class="badge">5</span><div>На рабочих серверах вход по паролю и вход для root обычно отключают в /etc/ssh/sshd_config.</div></li></ol>
+    <div class="callout "><span class="mono">scp</span> копирует файлы, <span class="mono">rsync</span> — синхронизирует, передавая только изменения. Оба работают поверх того же ssh.</div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Файрвол" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Сеть</div><h2>Фильтрация трафика</h2></header>
+<div class="two">
+  <div class="g2 cmdg"><article class="card cmdc" data-s="1"><div class="mono cmdn">ufw status verbose</div><p>Простой интерфейс поверх netfilter: понятные правила, разумные умолчания.</p></article><article class="card cmdc" data-s="2"><div class="mono cmdn">sudo ufw allow 22/tcp</div><p>Разрешить входящие соединения на порт SSH.</p></article><article class="card cmdc" data-s="3"><div class="mono cmdn">sudo ufw enable</div><p>Включить фильтрацию. Сначала разрешите SSH — иначе потеряете доступ к серверу.</p></article><article class="card cmdc" data-s="4"><div class="mono cmdn">firewall-cmd --list-all</div><p>Аналог в семействе RHEL: зоны и службы.</p></article><article class="card cmdc" data-s="5"><div class="mono cmdn">nft list ruleset</div><p>Прямая работа с nftables — современная замена iptables.</p></article><article class="card cmdc" data-s="6"><div class="mono cmdn">iptables -L -n -v</div><p>Классический синтаксис; во многих системах это обёртка над nftables.</p></article></div>
+  <div class="vstack">
+    <div class="card term mono "><div><span class="pr">$</span> <span class="cm">sudo ufw status verbose</span></div><div class="ot">Status: active</div><div class="ot">Default: deny (incoming), allow (outgoing)</div><div class="ot">22/tcp                     ALLOW IN    Anywhere</div><div class="ot">80,443/tcp                 ALLOW IN    Anywhere</div><div class="cmt"># всё входящее запрещено, кроме явно разрешённого</div></div>
+    <div class="callout warn">Фильтрация выполняется подсистемой ядра <b>netfilter</b>. <span class="mono">ufw</span>, <span class="mono">firewalld</span> и <span class="mono">iptables</span> — лишь разные способы задать ей правила.</div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Диски" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Хранение</div><h2>Диски, разделы и монтирование</h2></header>
+<div class="two">
+  <div class="card term mono "><div><span class="pr">$</span> <span class="cm">lsblk</span></div><div class="ot">NAME   SIZE TYPE MOUNTPOINTS</div><div class="ot">sda    238G disk</div><div class="ot">├─sda1   1G part /boot/efi</div><div class="ot">└─sda2  237G part /</div><div class="ot">sdb     32G disk</div><div class="ot">└─sdb1   32G part /mnt/usb</div><div><span class="pr">$</span> <span class="cm">df -h /</span></div><div class="ot">Файл.система Размер Использовано Дост Использовано% Смонтировано в</div><div class="ot">/dev/sda2      233G          98G  124G            45% /</div><div><span class="pr">$</span> <span class="cm">du -sh /var/log</span></div><div class="ot">1,8G	/var/log</div></div>
+  <div class="vstack">
+    <div class="tw card"><table class="tbl "><thead><tr><th>Команда</th><th>Назначение</th></tr></thead><tbody><tr data-s="1"><th>lsblk</th><td class="">Дерево дисков, разделов и точек монтирования.</td></tr><tr data-s="2"><th>df -h</th><td class="">Сколько свободно на смонтированных файловых системах.</td></tr><tr data-s="3"><th>du -sh каталог</th><td class="">Сколько занимает конкретный каталог.</td></tr><tr data-s="4"><th>sudo mount /dev/sdb1 /mnt/usb</th><td class="">Подключить раздел в каталог.</td></tr><tr data-s="5"><th>sudo umount /mnt/usb</th><td class="">Отключить. Занятый раздел не отмонтируется — смотрите lsof.</td></tr><tr data-s="6"><th>/etc/fstab</th><td class="">Что монтировать автоматически при загрузке.</td></tr><tr data-s="7"><th>blkid</th><td class="">UUID разделов — в fstab их указывают вместо имён вида /dev/sdb1.</td></tr></tbody></table></div>
+    <div class="callout ">Кончилось место — начните с <span class="mono">df -h</span>, затем <span class="mono">du -sh /var/* | sort -h | tail</span>: чаще всего виноваты журналы или кеш пакетов.</div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Архивы" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Хранение</div><h2>Архивы и резервные копии</h2></header>
+<div class="two">
+  <div class="g2 cmdg"><article class="card cmdc" data-s="1"><div class="mono cmdn">tar czf arc.tar.gz dir/</div><p>Создать сжатый архив: c — create, z — gzip, f — файл.</p></article><article class="card cmdc" data-s="2"><div class="mono cmdn">tar xzf arc.tar.gz</div><p>Распаковать в текущий каталог (x — extract).</p></article><article class="card cmdc" data-s="3"><div class="mono cmdn">tar tzf arc.tar.gz</div><p>Посмотреть содержимое, ничего не распаковывая.</p></article><article class="card cmdc" data-s="4"><div class="mono cmdn">tar xzf arc.tar.gz -C /opt</div><p>Распаковать в указанный каталог.</p></article><article class="card cmdc" data-s="5"><div class="mono cmdn">gzip / gunzip файл</div><p>Сжать или разжать отдельный файл.</p></article><article class="card cmdc" data-s="6"><div class="mono cmdn">zip -r arc.zip dir/ , unzip</div><p>Формат для обмена с Windows.</p></article><article class="card cmdc" data-s="7"><div class="mono cmdn">rsync -avz src/ dst/</div><p>Синхронизация каталогов, в том числе по сети.</p></article><article class="card cmdc" data-s="8"><div class="mono cmdn">sha256sum файл</div><p>Контрольная сумма: проверить, что копия не повреждена.</p></article></div>
+  <div class="vstack">
+    <div class="card term mono "><div><span class="pr">$</span> <span class="cm">tar czf backup-$(date +%F).tar.gz /etc/nginx</span></div><div><span class="pr">$</span> <span class="cm">ls -lh backup-2026-05-14.tar.gz</span></div><div class="ot">-rw-r--r-- 1 student student 48K мая 14 11:02 backup-2026-05-14.tar.gz</div><div><span class="pr">$</span> <span class="cm">tar tzf backup-2026-05-14.tar.gz | head -3</span></div><div class="ot">etc/nginx/</div><div class="ot">etc/nginx/nginx.conf</div><div class="ot">etc/nginx/sites-enabled/</div><div class="cmt"># подстановка $(date +%F) вставляет дату в имя файла</div></div>
+    <div class="callout ">Резервная копия, которую ни разу не разворачивали, резервной копией не считается. Проверяйте восстановление хотя бы на тестовой машине.</div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Редакторы" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Командная строка</div><h2>Текстовые редакторы в терминале</h2></header>
+<div class="two">
+  <div class="vstack">
+    <h3>nano — для правки конфигурации</h3>
+    <div class="keys">
+      <span class="kb"><kbd>Ctrl</kbd>+<kbd>O</kbd> сохранить</span>
+      <span class="kb"><kbd>Ctrl</kbd>+<kbd>X</kbd> выйти</span>
+      <span class="kb"><kbd>Ctrl</kbd>+<kbd>W</kbd> поиск</span>
+      <span class="kb"><kbd>Ctrl</kbd>+<kbd>K</kbd> вырезать строку</span>
+      <span class="kb"><kbd>Ctrl</kbd>+<kbd>U</kbd> вставить</span>
+    </div>
+    <p class="p sm">Подсказки по клавишам всегда внизу экрана, знак <span class="mono">^</span> означает Ctrl.
+    Для быстрой правки файла на сервере этого достаточно.</p>
+    <div class="callout ">Если редактор открылся, а вы не знаете какой — посмотрите на подсказки внизу. Их нет и ничего не печатается? Это vim: нажмите <kbd>Esc</kbd>, затем <span class="mono">:q!</span> и Enter, чтобы выйти без сохранения.</div>
+  </div>
+  <div class="vstack">
+    <h3>vim — есть на любом сервере</h3>
+    <div class="tw card"><table class="tbl "><thead><tr><th>Режим или команда</th><th>Что делает</th></tr></thead><tbody><tr data-s="1"><th>Обычный режим</th><td class="">Esc — сюда возвращаемся всегда. Клавиши работают как команды.</td></tr><tr data-s="2"><th>Режим вставки</th><td class="">i или a — печатаем текст. Выход — Esc.</td></tr><tr data-s="3"><th>Командный режим</th><td class="">: — команды сохранения и выхода.</td></tr><tr data-s="4"><th>:w / :q / :wq / :q!</th><td class="">Сохранить / выйти / сохранить и выйти / выйти без сохранения.</td></tr><tr data-s="5"><th>dd / yy / p</th><td class="">Удалить строку / скопировать / вставить.</td></tr><tr data-s="6"><th>/шаблон, n</th><td class="">Поиск вперёд и переход к следующему совпадению.</td></tr><tr data-s="7"><th>gg / G / :42</th><td class="">В начало файла / в конец / к строке 42.</td></tr><tr data-s="8"><th>u / Ctrl+r</th><td class="">Отменить / повторить действие.</td></tr></tbody></table></div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Переменные" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Командная строка</div><h2>Переменные окружения и PATH</h2></header>
+<div class="two">
+  <div class="card term mono "><div><span class="pr">$</span> <span class="cm">echo $HOME $USER</span></div><div class="ot">/home/student student</div><div><span class="pr">$</span> <span class="cm">echo $PATH</span></div><div class="ot">/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin</div><div class="cmt"># оболочка ищет исполняемый файл в этих каталогах по порядку</div><div><span class="pr">$</span> <span class="cm">export EDITOR=nano</span></div><div><span class="pr">$</span> <span class="cm">env | grep -i lang</span></div><div class="ot">LANG=ru_RU.UTF-8</div><div><span class="pr">$</span> <span class="cm">echo 'export PATH=$PATH:~/bin' >> ~/.bashrc</span></div><div><span class="pr">$</span> <span class="cm">source ~/.bashrc</span></div><div class="cmt"># применить изменения без перезахода</div></div>
+  <div class="vstack">
+    <div class="tw card"><table class="tbl "><thead><tr><th>Переменная</th><th>Смысл</th></tr></thead><tbody><tr data-s="1"><th>$HOME</th><td class="">Домашний каталог пользователя.</td></tr><tr data-s="2"><th>$USER</th><td class="">Имя текущего пользователя.</td></tr><tr data-s="3"><th>$PATH</th><td class="">Список каталогов для поиска команд.</td></tr><tr data-s="4"><th>$PWD, $OLDPWD</th><td class="">Текущий и предыдущий каталоги.</td></tr><tr data-s="5"><th>$?</th><td class="">Код возврата последней команды: 0 — успех.</td></tr><tr data-s="6"><th>$$ , $!</th><td class="">PID оболочки и последнего фонового процесса.</td></tr><tr data-s="7"><th>~/.bashrc</th><td class="">Настройки интерактивной оболочки: псевдонимы, переменные, приглашение.</td></tr></tbody></table></div>
+    <div class="callout ">Своя команда не находится, хотя файл на месте? Проверьте, что каталог есть в <span class="mono">$PATH</span> и у файла установлен бит исполнения. Запустить не из PATH можно так: <span class="mono">./program</span>.</div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Скрипты" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Командная строка</div><h2>Первый скрипт на bash</h2></header>
+<div class="two">
+  <div class="card term mono "><div class="cmt"># файл check-net.sh</div><div class="ot">#!/bin/bash</div><div class="ot"># проверка доступности узлов из списка</div><div class="ot">HOSTS=&quot;10.25.200.1 8.8.8.8 example.com&quot;</div><div class="ot">for h in $HOSTS; do</div><div class="ot">    if ping -c 1 -W 1 &quot;$h&quot; > /dev/null 2>&1; then</div><div class="ot">        echo &quot;$h доступен&quot;</div><div class="ot">    else</div><div class="ot">        echo &quot;$h НЕ отвечает&quot; >&2</div><div class="ot">    fi</div><div class="ot">done</div></div>
+  <div class="vstack">
+    <ol class="steps "><li data-s="1"><span class="badge">1</span><div>Первая строка — <b>shebang</b>: она говорит ядру, какой интерпретатор запускать.</div></li><li data-s="2"><span class="badge">2</span><div>Переменные присваиваются без пробелов вокруг «=», читаются со знаком $.</div></li><li data-s="3"><span class="badge">3</span><div>Значения переменных берут в кавычки: иначе пробел в значении разорвёт команду.</div></li><li data-s="4"><span class="badge">4</span><div>Цикл <span class="mono">for … in … do … done</span>, ветвление <span class="mono">if … then … else … fi</span>.</div></li><li data-s="5"><span class="badge">5</span><div>Условие в if — это код возврата команды: 0 означает «истина».</div></li></ol>
+    <div class="card term mono "><div><span class="pr">$</span> <span class="cm">chmod +x check-net.sh</span></div><div><span class="pr">$</span> <span class="cm">./check-net.sh</span></div><div class="ot">10.25.200.1 доступен</div><div class="ot">8.8.8.8 доступен</div><div class="ot">example.com НЕ отвечает</div></div>
+  </div>
+</div></div></div></section><section class="slide " data-label="Безопасность" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Итог</div><h2>Правила, которые экономят нервы</h2></header><div class="g3"><article class="card fc c-mint" data-s="1"><div class="ftag mono">Меньше прав</div><p>Под root только то, что нельзя иначе. Постоянная работа в консоли root — источник большинства аварий.</p></article><article class="card fc c-sky" data-s="2"><div class="ftag mono">Сначала посмотреть</div><p>Перед rm и chmod -R выполните ls с тем же шаблоном: увидите, что попадёт под команду.</p></article><article class="card fc c-lilac" data-s="3"><div class="ftag mono">Копия конфигурации</div><p>cp nginx.conf nginx.conf.bak перед правкой — тридцать секунд против часа восстановления.</p></article><article class="card fc c-pink" data-s="4"><div class="ftag mono">Проверять синтаксис</div><p>nginx -t, sshd -t, visudo вместо прямого редактирования — они не дадут сохранить ошибку.</p></article><article class="card fc c-mint" data-s="5"><div class="ftag mono">Не терять доступ</div><p>Правите файрвол или sshd на удалённом сервере — держите открытой вторую сессию.</p></article><article class="card fc c-sky" data-s="6"><div class="ftag mono">Читать журналы</div><p>journalctl и /var/log отвечают на вопрос «почему» гораздо быстрее, чем перезагрузка.</p></article></div></div></div></section><section class="slide tight" data-label="Тренажёр: chmod" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Тренажёры</div><h2>Тренажёр: права доступа</h2></header>
+<div class="two">
+  <div class="card trn">
+    <div class="tq" id="tc-q"></div>
+    <div class="trow">
+      <input id="tc-in" inputmode="text" autocomplete="off" aria-label="Ответ">
+      <button class="btn pri" id="tc-ok" type="button">Проверить</button>
+      <button class="btn" id="tc-nx" type="button">Другое задание</button>
+    </div>
+    <div class="tres" id="tc-r" role="status"></div>
+    <div class="tscore">Счёт: <span id="tc-sc" class="mono">0 / 0</span></div>
+  </div>
+  <div class="vstack">
+    <div class="callout ">Напоминание: <b>r = 4</b>, <b>w = 2</b>, <b>x = 1</b>. Права считаются отдельно для владельца, группы и остальных, затем три цифры записываются подряд.</div>
+    <div class="tw card"><table class="tbl "><thead><tr><th>Тройка</th><th>Цифра</th></tr></thead><tbody><tr data-s="1"><th>rwx</th><td class="mono">4+2+1 = 7</td></tr><tr data-s="2"><th>rw-</th><td class="mono">4+2 = 6</td></tr><tr data-s="3"><th>r-x</th><td class="mono">4+1 = 5</td></tr><tr data-s="4"><th>r--</th><td class="mono">4</td></tr><tr data-s="5"><th>-wx</th><td class="mono">2+1 = 3</td></tr><tr data-s="6"><th>--x</th><td class="mono">1</td></tr><tr data-s="7"><th>---</th><td class="mono">0</td></tr></tbody></table></div>
+  </div>
+</div></div></div></section><section class="slide tight" data-label="Тренажёр: команды" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Тренажёры</div><h2>Тренажёр: подберите команду</h2></header>
+<div class="card quiz">
+  <div class="qtop"><span>Задача</span><span class="mono" id="cm-sc">0 / 0</span></div>
+  <div class="tq" id="cm-q"></div>
+  <div class="opts col" id="cm-o"></div>
+  <div class="tres" id="cm-r" role="status"></div>
+  <button class="btn" id="cm-nx" type="button">Следующая задача</button>
+</div></div></div></section><section class="slide tight" data-label="Проверь себя" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Итог</div><h2>Проверь себя</h2></header>
+<div class="card quiz">
+  <div class="qtop"><span class="mono" id="qz-n"></span><span class="mono" id="qz-sc"></span></div>
+  <div class="tq" id="qz-q"></div>
+  <div class="opts" id="qz-o"></div>
+  <div class="tres" id="qz-e" role="status"></div>
+  <div class="trow"><button class="btn" id="qz-pv" type="button">Назад</button>
+  <button class="btn pri" id="qz-nx" type="button">Следующий вопрос</button></div>
+</div></div></div></section><section class="slide tight" data-label="Шпаргалка" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Итог</div><h2>Шпаргалка: команды, которые нужны каждый день</h2></header>
+<div class="g3 cheat">
+  <article class="card cheatc"><h3>Навигация</h3><div class="chl"><span class="mono">pwd</span><span>где я</span></div><div class="chl"><span class="mono">ls -lah</span><span>подробный список</span></div><div class="chl"><span class="mono">cd -</span><span>назад</span></div><div class="chl"><span class="mono">find . -name '*.log'</span><span>поиск файлов</span></div><div class="chl"><span class="mono">tree -L 2</span><span>дерево</span></div></article><article class="card cheatc"><h3>Файлы</h3><div class="chl"><span class="mono">cp -r, mv, rm -r</span><span>копировать, переместить, удалить</span></div><div class="chl"><span class="mono">cat, less, tail -f</span><span>просмотр</span></div><div class="chl"><span class="mono">grep -rn шаблон .</span><span>поиск текста</span></div><div class="chl"><span class="mono">tar czf a.tgz dir</span><span>архив</span></div><div class="chl"><span class="mono">ln -s цель имя</span><span>ссылка</span></div></article><article class="card cheatc"><h3>Права</h3><div class="chl"><span class="mono">ls -l</span><span>посмотреть</span></div><div class="chl"><span class="mono">chmod 755 файл</span><span>задать</span></div><div class="chl"><span class="mono">chown user:group</span><span>владелец</span></div><div class="chl"><span class="mono">sudo команда</span><span>от root</span></div><div class="chl"><span class="mono">id, groups</span><span>кто я</span></div></article><article class="card cheatc"><h3>Процессы</h3><div class="chl"><span class="mono">ps aux | grep имя</span><span>найти</span></div><div class="chl"><span class="mono">top, htop</span><span>нагрузка</span></div><div class="chl"><span class="mono">kill -15 PID</span><span>завершить</span></div><div class="chl"><span class="mono">jobs, fg, bg</span><span>задания</span></div><div class="chl"><span class="mono">nohup … &</span><span>пережить выход</span></div></article><article class="card cheatc"><h3>Службы и пакеты</h3><div class="chl"><span class="mono">systemctl status</span><span>состояние</span></div><div class="chl"><span class="mono">systemctl restart</span><span>перезапуск</span></div><div class="chl"><span class="mono">journalctl -u -n 50</span><span>журнал</span></div><div class="chl"><span class="mono">apt install пакет</span><span>установка</span></div><div class="chl"><span class="mono">apt update</span><span>индексы</span></div></article><article class="card cheatc"><h3>Сеть</h3><div class="chl"><span class="mono">ip -br a</span><span>адреса</span></div><div class="chl"><span class="mono">ip r</span><span>маршруты</span></div><div class="chl"><span class="mono">ping, traceroute</span><span>доступность</span></div><div class="chl"><span class="mono">ss -tulpn</span><span>порты</span></div><div class="chl"><span class="mono">ssh user@host</span><span>удалённый вход</span></div></article>
+</div></div></div></section><section class="slide tight" data-label="Итоги" data-anim=""><div class="sc"><div class="wrap"><header class="sh"><div class=kick>Итог</div><h2>Итоги</h2></header>
+<div class="two">
+  <ol class="steps "><li data-s="1"><span class="badge">1</span><div>Linux — это ядро; работоспособную систему из него делают утилиты GNU, оболочка и менеджер пакетов.</div></li><li data-s="2"><span class="badge">2</span><div>Файловая система — одно дерево, начинающееся с корня; всё, включая устройства, представлено файлами.</div></li><li data-s="3"><span class="badge">3</span><div>Оболочка соединяет простые утилиты потоками и конвейерами — в этом её сила.</div></li><li data-s="4"><span class="badge">4</span><div>Права доступа описываются тремя категориями и тремя битами; числовая форма — просто их сумма.</div></li><li data-s="5"><span class="badge">5</span><div>Процессы порождают друг друга, управляются сигналами, а службами занимается systemd.</div></li><li data-s="6"><span class="badge">6</span><div>Сетевые задачи решает связка ip, ss, ping, traceroute, dig и ssh — от интерфейса до приложения.</div></li></ol>
+  <div class="vstack">
+    <h3>Что делать дальше</h3>
+    <div class="g2 cmdg"><article class="card cmdc" data-s="1"><div class="mono cmdn">Поставить систему</div><p>Виртуальная машина с Debian или Ubuntu Server — без графики, чтобы привыкнуть к консоли.</p></article><article class="card cmdc" data-s="2"><div class="mono cmdn">Читать man</div><p>man 5 fstab, man 7 signal — разделы 5 и 7 описывают форматы файлов и общие понятия.</p></article><article class="card cmdc" data-s="3"><div class="mono cmdn">Автоматизировать</div><p>Любое действие, выполненное трижды вручную, оформляйте скриптом.</p></article><article class="card cmdc" data-s="4"><div class="mono cmdn">Разбирать чужое</div><p>Найдите непонятный конвейер и разложите его по звеньям — это лучшее упражнение.</p></article></div>
+  </div>
+</div></div></div></section></main><nav id="nav" aria-label="Навигация по слайдам"><button id="b-prev" type="button" aria-label="Предыдущий слайд"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><span id="ind" aria-live="polite"></span><button id="b-next" type="button" aria-label="Следующий слайд"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button><span class="nsep"></span><button id="b-play" type="button" title="Клавиша R"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.5-5.8M4 4v5h5"/></svg><span class="lbl2">Повторить анимацию</span></button><button id="b-ov" type="button" title="Esc"><svg viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg><span class="lbl2">Меню</span></button></nav><div id="ov" hidden><h2>Содержание</h2><div class="ovg"></div></div><script>
+(function(){
+'use strict';
+var $=function(s,r){return (r||document).querySelector(s)}, $$=function(s,r){return [].slice.call((r||document).querySelectorAll(s))};
+var SCENES={"arch":{"n":6,"w":[1100,900,900,1200,900,900,1100],"e":{"l6":{"c":["","on","on","on","on","on","on"]},"l5":{"c":["","","on","on","on","on","on"]},"l4":{"c":["","","","on","on","on","on"]},"l3":{"c":["","","","","on","on","on"]},"l2":{"c":["","","","","","on","on"]},"l1":{"c":["","","","","","","on"]}}},"syscall":{"n":5,"w":[1100,1000,1300,1300,1400,1100],"e":{"sq":{"p":[[0,0],[0,0],[300,0],[300,0],[300,0],[300,0]],"o":[0,1,1,0,0,0]},"dt":{"p":[[0,0],[0,0],[0,0],[0,0],[-440,-220],[-440,-220]],"o":[0,0,0,1,1,0]},"scap":{"t":["Программе нужен файл — напрямую к диску она обратиться не может","Вызов функции библиотеки open() из пространства пользователя","Переключение в режим ядра: управление получает обработчик системного вызова","Ядро проверяет права и обращается к драйверу устройства","Данные возвращаются программе, процессор снова в режиме пользователя","Любой доступ к оборудованию идёт только через ядро"]}}},"boot":{"n":5,"w":[1100,1200,1200,1300,1300,1300],"e":{"u1":{"c":["","on","done","done","done","done"]},"u2":{"c":["","","on","done","done","done"]},"u3":{"c":["","","","on","done","done"]},"u4":{"c":["","","","","on","done"]},"u5":{"c":["","","","","","on"]},"bcap":{"t":["Нажата кнопка питания","1. Прошивка UEFI проверяет оборудование и ищет загрузчик","2. GRUB показывает меню и загружает выбранное ядро","3. Ядро разворачивается в память и монтирует initramfs","4. systemd получает PID 1 и поднимает службы по зависимостям","5. Достигнута цель graphical.target — можно входить в систему"]},"bsub":{"t":["","vmlinuz и initrd лежат в /boot","параметры ядра: root=UUID=… ro quiet","в initramfs — драйверы, нужные чтобы увидеть корневой диск","systemctl list-units покажет, что запущено","systemd-analyze blame — кто дольше всех стартовал"]}}},"pipe":{"n":5,"w":[1100,1000,1200,1200,1200,1100],"e":{"p1":{"c":["","on","done","done","done","done"]},"p2":{"c":["","","on","done","done","done"]},"p3":{"c":["","","","on","done","done"]},"k1":{"o":[0,0,1,0,0,0]},"k2":{"o":[0,0,0,1,0,0]},"k3":{"o":[0,0,0,0,1,1]},"pcap":{"t":["cat access.log | grep '404' | wc -l","cat читает файл и пишет строки в свой стандартный вывод","канал соединяет stdout первой команды со stdin второй","grep пропускает дальше только строки с «404»","wc -l считает, сколько строк дошло до него — ответ на экране","Ни одна промежуточная запись на диск не понадобилась"]}}},"perm":{"n":5,"w":[1100,1100,1200,1200,1200,1100],"e":{"gO":{"o":[0,0,1,0,0,0]},"gG":{"o":[0,0,0,1,0,0]},"gA":{"o":[0,0,0,0,1,0]},"n1":{"o":[0,0,1,1,1,1]},"n2":{"o":[0,0,0,1,1,1]},"n3":{"o":[0,0,0,0,1,1]},"mcap":{"t":["ls -l показывает десять символов: тип и три группы прав","Первый символ — тип: «-» обычный файл, «d» каталог, «l» ссылка","Владелец: rwx = 4 + 2 + 1 = 7","Группа: r-x = 4 + 0 + 1 = 5","Остальные: r-- = 4 + 0 + 0 = 4","Итого -rwxr-xr-- это 754, то есть chmod 754 file"]}}},"proc":{"n":5,"w":[1100,1100,1300,1300,1300,1100],"e":{"pb":{"c":["","on","on","on","on","on"]},"pf":{"o":[0,0,1,1,1,1],"c":["","","on","on","on","on"]},"pl":{"o":[0,0,0,1,1,1],"c":["","","","on","on","on"]},"pk":{"o":[0,0,0,0,1,1]},"prcap":{"t":["Каждый процесс порождён другим процессом","systemd запустил оболочку: у bash PID 1420","fork() — bash создаёт свою копию, ядро выдаёт ей новый PID 1533","exec() — копия заменяет свой код программой ls, PID сохраняется","kill -TERM 1533 просит процесс завершиться; kill -9 снимает его принудительно","Завершившийся процесс возвращает код выхода родителю: echo $?"]}}},"pkg":{"n":4,"w":[1100,1100,1300,1200,1300],"e":{"gp":{"o":[0,1,1,1,1]},"r1":{"c":["","on","on","on","on"]},"r2":{"c":["","","on","on","on"]},"r4":{"c":["","","","on","on"]},"r3":{"c":["","","","","on"]},"gcap":{"t":["apt install nginx — одна команда вместо ручной сборки","apt сверяется с локальным индексом пакетов и находит нужную версию","Менеджер вычисляет зависимости: какие библиотеки нужно доставить","Пакеты скачиваются и проверяются по цифровой подписи репозитория","dpkg распаковывает файлы, выполняет сценарии настройки, служба готова"]}}}};
+var slides=$$('.slide'), N=slides.length, cur=0, step=0, mode='steps', speed=1, timer=null, playing=false, paused=false;
+var RM=window.matchMedia('(prefers-reduced-motion: reduce)');
+var root=document.documentElement;
+slides.forEach(function(s){
+  var els=$$('[data-s],[data-k],[data-p]',s), mx=0;
+  els.forEach(function(e){['s','k','p'].forEach(function(a){var v=+e.dataset[a]||0; if(v>mx)mx=v;});});
+  var sc=$('[data-scene]',s);
+  if(sc){ var sp=SCENES[sc.dataset.scene]; sc._sp=sp; sc._map={};
+    Object.keys(sp.e).forEach(function(id){ var el=$('[data-id="'+id+'"]',sc); if(el){ el._b=el.getAttribute('class')||''; sc._map[id]=el; } });
+    s._scene=sc; mx=Math.max(mx,sp.n); }
+  s._els=els; s._max=mx;
+});
+function applyScene(sc,k,instant){
+  var sp=sc._sp; k=Math.min(k,sp.n);
+  Object.keys(sp.e).forEach(function(id){
+    var el=sc._map[id], t=sp.e[id]; if(!el) return;
+    if(t.p){ el.style.transform='translate('+t.p[k][0]+'px,'+t.p[k][1]+'px)'; }
+    if(t.o){ el.style.opacity=t.o[k]; }
+    if(t.c){ var c=t.c[k]; el.setAttribute('class',(el._b+' '+c).trim()); }
+    if(t.t){ if(el.textContent!==t.t[k]){ el.textContent=t.t[k];
+      if(!instant && el.tagName!=='text' && el.tagName!=='P'){ var kv=el.parentNode; kv.classList.remove('flash'); void kv.offsetWidth; kv.classList.add('flash'); } } }
+  });
+}
+function waitFor(sl,k){
+  if(sl._scene && k<=sl._scene._sp.n) return sl._scene._sp.w[k]||1100;
+  var w=0;
+  sl._els.forEach(function(e){ if(+e.dataset.s===k||+e.dataset.k===k){ w=Math.max(w,+e.dataset.w||0); } });
+  return w||300;
+}
+function setStep(k,instant){
+  var sl=slides[cur]; step=Math.max(0,Math.min(sl._max,k));
+  if(instant) sl.classList.add('ni');
+  sl._els.forEach(function(e){
+    var d=e.dataset;
+    if(d.s) e.classList.toggle('in',+d.s<=step);
+    if(d.k) e.classList.toggle('kl',+d.k<=step);
+    if(d.p!==undefined){
+      if(d.k!==undefined) e.classList.toggle('pulse',+d.p<=step && +d.k>step);
+      else { e.classList.remove('pulse'); if(!instant && +d.p===step){ void e.getBoundingClientRect(); e.classList.add('pulse'); } } }
+  });
+  if(sl._scene) applyScene(sl._scene,step,instant);
+  if(instant){ void sl.offsetWidth; sl.classList.remove('ni'); }
+  ui();
+}
+function stopPlay(){ clearTimeout(timer); timer=null; playing=false; paused=false; ui(); }
+function schedule(ms){ clearTimeout(timer); timer=setTimeout(tick, ms/speed); }
+function tick(){
+  var sl=slides[cur];
+  if(step>=sl._max){ playing=false; paused=false; ui();
+    if(sl.dataset.anim==='loop'&&!RM.matches){ var me=cur; timer=setTimeout(function(){ if(cur===me&&ov.hidden) play(); },2600); }
+    return; }
+  setStep(step+1,false);
+  schedule(waitFor(sl,step));
+}
+function play(from){
+  stopPlay();
+  if(RM.matches){ setStep(slides[cur]._max,true); return; }
+  if(!slides[cur]._max) return;
+  setStep(from||0,true); playing=true; ui(); schedule(280);
+}
+function togglePause(){
+  if(!playing) return false;
+  if(paused){ paused=false; schedule(280); } else { paused=true; clearTimeout(timer); }
+  ui(); return true;
+}
+function go(i,atEnd){
+  i=Math.max(0,Math.min(N-1,i));
+  stopPlay();
+  slides.forEach(function(s){s.classList.remove('on')}); cur=i; slides[cur].classList.add('on');
+  var sc=$('.sc',slides[cur]); if(sc) sc.scrollTop=0;
+  var hasSc=!!slides[cur]._scene;
+  setStep((hasSc&&!RM.matches)?0:slides[cur]._max,true);
+  try{ history.replaceState(null,'','#'+(cur+1)); }catch(e){}
+  if(hasSc && !RM.matches) play();
+}
+function next(){ if(cur<N-1) go(cur+1); }
+function prev(){ if(cur>0) go(cur-1); }
+var ind=$('#ind'), bPlay=$('#b-play');
+function ui(){
+  var mx=slides[cur]._max;
+  ind.textContent=(cur+1)+' / '+N;
+  $('#prog i').style.width=((cur+1)/N*100)+'%';
+  bPlay.disabled=!slides[cur]._scene; bPlay.style.visibility=slides[cur]._scene?'':'hidden';
+}
+$('#b-prev').onclick=prev; $('#b-next').onclick=next;
+bPlay.onclick=function(){ play(); };
+document.addEventListener('click',function(e){ var b=e.target.closest&&e.target.closest('.qa-b'); if(!b) return;
+  var a=b.nextElementSibling; a.hidden=!a.hidden; b.textContent=a.hidden?'Показать ответ':'Скрыть ответ'; });
+var ov=$('#ov'), ovg=$('.ovg',ov);
+slides.forEach(function(s,k){
+  var b=document.createElement('button'); b.className='ovi'; b.type='button';
+  b.innerHTML='<span class="ovt"></span><span class="ovn"><span class="mono">'+(k+1)+'</span><span></span></span>'; b.querySelector('.ovn').lastChild.textContent=s.dataset.label;
+  b.onclick=function(){ closeOv(); go(k); }; ovg.appendChild(b);
+});
+var ovBuilt=false;
+function buildThumbs(){
+  var W=innerWidth, H=innerHeight;
+  $$('.ovi',ov).forEach(function(b,k){
+    var box=$('.ovt',b); box.innerHTML='';
+    var c=slides[k].cloneNode(true); c.classList.add('on'); c.removeAttribute('id');
+    $$('[id]',c).forEach(function(e){e.removeAttribute('id')});
+    $$('input,button,select,textarea',c).forEach(function(e){e.tabIndex=-1});
+    c.setAttribute('aria-hidden','true'); c.style.width=W+'px'; c.style.height=H+'px';
+    box.appendChild(c); c.style.transform='scale('+(box.clientWidth/W)+')';
+  });
+  ovBuilt=true;
+}
+addEventListener('resize',function(){ ovBuilt=false; if(!ov.hidden) buildThumbs(); });
+function openOv(){ stopPlay(); ov.hidden=false; if(!ovBuilt) buildThumbs(); $$('.ovi',ov).forEach(function(b,k){b.classList.toggle('cur',k===cur)}); var c=$('.ovi.cur',ov); if(c)c.focus(); }
+function closeOv(){ ov.hidden=true; }
+$('#b-ov').onclick=openOv;
+var dbuf='', dtm=null;
+document.addEventListener('keydown',function(e){
+  var t=e.target, tag=t.tagName;
+  if(e.ctrlKey||e.metaKey||e.altKey) return;
+  if(tag==='INPUT'||tag==='TEXTAREA'){ if(e.key==='Escape') t.blur(); return; }
+  if(e.key==='Escape'){ e.preventDefault(); ov.hidden?openOv():closeOv(); return; }
+  if(!ov.hidden) return;
+  switch(e.key){
+    case 'ArrowRight': case 'ArrowDown': case 'PageDown': e.preventDefault(); next(); return;
+    case 'ArrowLeft': case 'ArrowUp': case 'PageUp': e.preventDefault(); prev(); return;
+    case ' ': if(tag==='BUTTON') return; e.preventDefault(); next(); return;
+    case 'Home': e.preventDefault(); go(0); return;
+    case 'End': e.preventDefault(); go(N-1); return;
+  }
+  var k=e.key.toLowerCase();
+  if(k==='r'||k==='к'){ play(); return; }
+  if(/^[0-9]$/.test(e.key)){
+    dbuf+=e.key; clearTimeout(dtm);
+    dtm=setTimeout(function(){ var n=parseInt(dbuf,10); dbuf=''; if(n>=1&&n<=N) go(n-1); },550);
+  }
+});
+var lastWheel=0;
+window.addEventListener('wheel',function(e){
+  if(!ov.hidden) return;
+  var sc=$('.sc',slides[cur]); if(!sc) return;
+  var dy=e.deltaY; if(Math.abs(dy)<4) return;
+  if(dy>0 && sc.scrollTop+sc.clientHeight<sc.scrollHeight-2) return;
+  if(dy<0 && sc.scrollTop>0) return;
+  var now=Date.now(); if(now-lastWheel<420) return; lastWheel=now;
+  if(dy>0){ if(cur<N-1) go(cur+1); } else { if(cur>0) go(cur-1); }
+},{passive:true});
+var tx=0, ty=0, tt=0;
+window.addEventListener('touchstart',function(e){ var p=e.changedTouches[0]; tx=p.clientX; ty=p.clientY; tt=Date.now(); },{passive:true});
+window.addEventListener('touchend',function(e){
+  var p=e.changedTouches[0], dx=p.clientX-tx, dy=p.clientY-ty;
+  if(Date.now()-tt>700||Math.abs(dx)<60||Math.abs(dx)<Math.abs(dy)*1.4) return;
+  if(e.target.closest&&e.target.closest('input,.tw')) return;
+  dx<0?next():prev();
+},{passive:true});
+
+function rnd(n){ return Math.floor(Math.random()*n); }
+function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=rnd(i+1), t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+function choiceTrainer(qid,oid,rid,nid,scid,gen){
+  var tot=0, ok=0;
+  function nx(){
+    var q=gen(), o=$(oid), done=false; $(qid).innerHTML=q.q; o.innerHTML=''; $(rid).textContent=''; $(rid).className='tres';
+    shuffle(q.o).forEach(function(t){
+      var b=document.createElement('button'); b.type='button'; b.className='opt'; b.textContent=t;
+      b.onclick=function(){
+        if(done) return; done=true; var good=t===q.o[0];
+        $$('.opt',o).forEach(function(x){ if(x.textContent===q.o[0]) x.classList.add('ok'); });
+        if(!good) b.classList.add('no');
+        tot++; if(good) ok++;
+        $(rid).textContent=(good?'Верно. ':'Неверно. ')+q.e; $(rid).className='tres '+(good?'ok':'no');
+        if(scid) $(scid).textContent=ok+' / '+tot;
+      };
+      o.appendChild(b);
+    });
+  }
+  $(nid).onclick=nx; nx();
+}
+
+/* ---- тренажёр прав доступа ---- */
+(function(){
+  var ans='', expl='', tot=0, ok=0, answered=false, inp=$('#tc-in'), res=$('#tc-r');
+  var TR=['---','--x','-w-','-wx','r--','r-x','rw-','rwx'];
+  function nx(){
+    var a=rnd(8), b=rnd(8), c=rnd(8), s=TR[a]+TR[b]+TR[c], n=''+a+b+c;
+    if(rnd(2)===0){
+      $('#tc-q').innerHTML='Команда <b class="mono">ls -l</b> показала права <b class="mono">-'+s+'</b>. Каким числом задать их через <b class="mono">chmod</b>?';
+      ans=n; expl='-'+s+': '+TR[a]+' = '+a+', '+TR[b]+' = '+b+', '+TR[c]+' = '+c+', то есть chmod '+n;
+    } else {
+      $('#tc-q').innerHTML='Выполнено <b class="mono">chmod '+n+' file</b>. Какие девять символов покажет <b class="mono">ls -l</b> после типа файла? (например rwxr-xr--)';
+      ans=s; expl='chmod '+n+': '+a+' = '+TR[a]+', '+b+' = '+TR[b]+', '+c+' = '+TR[c]+', то есть -'+s;
+    }
+    inp.value=''; res.textContent=''; res.className='tres'; answered=false;
+  }
+  function chk(){
+    var v=inp.value.trim().toLowerCase().replace(/^-/,'').replace(/\s+/g,'');
+    if(!v){ res.textContent='Введите ответ.'; res.className='tres no'; return; }
+    var good=(v===ans);
+    if(!answered){ tot++; if(good) ok++; answered=true; }
+    res.textContent=(good?'Верно: ':'Неверно: ')+expl+'.'; res.className='tres '+(good?'ok':'no');
+    $('#tc-sc').textContent=ok+' / '+tot;
+  }
+  $('#tc-ok').onclick=chk; $('#tc-nx').onclick=nx;
+  inp.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); answered?nx():chk(); } });
+  nx();
+})();
+/* ---- тренажёр команд ---- */
+var TASKS=[["Показать все процессы системы с нагрузкой на процессор и память", "ps aux", "ps aux выводит все процессы всех пользователей вместе с %CPU и %MEM."], ["Найти во всех файлах каталога /etc строки со словом listen", "grep -rn 'listen' /etc/", "Ключ -r — рекурсивно по каталогу, -n — показать номера строк."], ["Следить за журналом в реальном времени, видя новые строки", "tail -f /var/log/syslog", "tail -f не завершается и дописывает на экран каждую новую строку файла."], ["Узнать, сколько свободного места осталось на дисках", "df -h", "df показывает занятое и свободное место на смонтированных файловых системах, -h — в удобных единицах."], ["Разрешить запуск собственного скрипта", "chmod +x script.sh", "Без бита исполнения оболочка откажется запускать файл, сообщив «Отказано в доступе»."], ["Посмотреть таблицу маршрутизации и шлюз по умолчанию", "ip r", "ip r (ip route) выводит маршруты; строка default via … — шлюз по умолчанию."], ["Выяснить, какая служба слушает порт 443", "ss -tulpn", "ss -tulpn покажет TCP и UDP сокеты в состоянии LISTEN вместе с именем и PID процесса."], ["Создать вложенные каталоги labs/net/lab3 одной командой", "mkdir -p labs/net/lab3", "Ключ -p создаёт все недостающие каталоги цепочки и не ругается на уже существующие."], ["Перезапустить веб-сервер nginx", "sudo systemctl restart nginx", "systemctl restart останавливает и снова запускает службу; для правки конфигурации хватит reload."], ["Скопировать каталог на удалённый сервер по ssh", "scp -r dir user@host:/path", "scp копирует поверх ssh; для больших объёмов и повторов удобнее rsync -avz."], ["Посмотреть журнал службы nginx за текущую загрузку", "journalctl -u nginx -b", "Ключ -u выбирает юнит, -b ограничивает вывод текущей загрузкой системы."], ["Найти в текущем дереве файлы больше 100 мегабайт", "find . -type f -size +100M", "find ищет по дереву: -type f — обычные файлы, -size +100M — больше 100 МБ."], ["Создать сжатый архив каталога www", "tar czf www.tar.gz www/", "c — создать, z — сжать gzip, f — имя файла архива."], ["Узнать свой UID и список групп", "id", "id печатает uid, gid и все группы текущего пользователя."], ["Сменить владельца и группу файла", "sudo chown user:group file", "chown меняет владельца; после двоеточия указывается группа. Нужны права root."], ["Узнать, сколько места занимает каталог /var/log", "du -sh /var/log", "du -s — суммарно по каталогу, -h — в мегабайтах и гигабайтах."], ["Разрешить входящие соединения на порт SSH", "sudo ufw allow 22/tcp", "ufw — простой интерфейс к netfilter; правило открывает входящий TCP-порт 22."], ["Посмотреть список недавно выполненных команд", "history", "history печатает историю команд оболочки; !NN повторяет команду по номеру."], ["Определить, где лежит исполняемый файл команды python3", "which python3", "which ищет файл по каталогам из переменной PATH."], ["Показать сетевые интерфейсы и их адреса кратко", "ip -br a", "Ключ -br (brief) выводит по одной строке на интерфейс: имя, состояние, адреса."]];
+choiceTrainer('#cm-q','#cm-o','#cm-r','#cm-nx','#cm-sc',function(){
+  var t=TASKS[rnd(TASKS.length)];
+  var others=shuffle(TASKS.filter(function(x){return x[1]!==t[1];})).slice(0,3).map(function(x){return x[1];});
+  return {q:t[0], o:[t[1]].concat(others), e:t[2]};
+});
+(function(){
+  var Q=[{"q": "Что такое Linux в строгом смысле слова?", "a": 1, "o": ["Полноценная операционная система вместе с утилитами и графической оболочкой", "Ядро операционной системы", "Дистрибутив, разработанный компанией GNU", "Командная оболочка, совместимая с Unix"], "e": "Linux — это ядро. Система целиком собирается из ядра, утилит GNU, оболочки и менеджера пакетов, поэтому её называют GNU/Linux."}, {"q": "В каком каталоге по стандарту FHS хранятся конфигурационные файлы системы?", "a": 2, "o": ["/var", "/usr/bin", "/etc", "/opt"], "e": "/etc — общесистемные настройки в текстовом виде. /var — изменяемые данные, /usr/bin — программы, /opt — стороннее ПО."}, {"q": "Как записать права -rwxr-x--- числом для команды chmod?", "a": 0, "o": ["750", "755", "740", "700"], "e": "rwx = 7, r-x = 5, --- = 0. Получается chmod 750."}, {"q": "Что делает конвейер cat access.log | grep 404 | wc -l?", "a": 3, "o": ["Записывает строки с 404 в файл wc", "Показывает на экране все строки журнала", "Удаляет из журнала строки с кодом 404", "Считает, сколько строк журнала содержит «404»"], "e": "cat отдаёт строки grep, тот пропускает только содержащие 404, wc -l считает их количество. На экран попадает одно число."}, {"q": "Чем kill -9 PID отличается от kill PID?", "a": 1, "o": ["Ничем, это синонимы", "SIGKILL нельзя перехватить: ядро снимает процесс, не давая ему сохранить данные", "kill -9 посылает сигнал всем процессам пользователя", "kill -9 перезапускает процесс после завершения"], "e": "kill без ключей посылает SIGTERM (15) — просьбу завершиться. SIGKILL (9) обрабатывается ядром и не может быть перехвачен программой."}, {"q": "Какой процесс в современной системе имеет PID 1?", "a": 2, "o": ["bash", "Ядро Linux", "systemd (или другая система инициализации)", "kthreadd"], "e": "PID 1 получает система инициализации — она запускает службы и усыновляет процессы, оставшиеся без родителя. Ядро процессом не является."}, {"q": "Что означает 2> /dev/null в конце команды?", "a": 0, "o": ["Отбросить сообщения об ошибках, оставив на экране полезный вывод", "Отбросить весь вывод команды", "Записать результат в файл null", "Запустить команду в фоне"], "e": "Дескриптор 2 — это stderr, /dev/null — устройство, поглощающее всё записанное. Полезный вывод идёт через дескриптор 1 и остаётся на экране."}, {"q": "Команда systemctl enable nginx — что она сделает?", "a": 3, "o": ["Запустит nginx прямо сейчас", "Перечитает конфигурацию nginx", "Установит пакет nginx из репозитория", "Включит автоматический запуск nginx при загрузке системы"], "e": "enable управляет автозапуском, start — запуском в текущем сеансе. Их часто дают вместе: systemctl enable --now nginx."}, {"q": "Что делает apt update?", "a": 1, "o": ["Обновляет все установленные пакеты до новых версий", "Обновляет локальный список пакетов, доступных в репозиториях", "Обновляет ядро системы", "Проверяет целостность установленных файлов"], "e": "apt update скачивает индексы репозиториев. Сами пакеты обновляет apt upgrade — и почти всегда её запускают после update."}, {"q": "Что обозначает символ ~ в пути ~/labs/report.md?", "a": 2, "o": ["Корень файловой системы", "Текущий каталог", "Домашний каталог текущего пользователя", "Родительский каталог"], "e": "~ раскрывается оболочкой в /home/имя (для root — /root). Корень — /, текущий каталог — точка, родительский — две точки."}, {"q": "Какая команда покажет IP-адреса сетевых интерфейсов в современном дистрибутиве?", "a": 0, "o": ["ip a", "ping -a", "netcat -l", "traceroute -i"], "e": "Утилита ip заменила устаревшие ifconfig и route. Краткий вид — ip -br a, маршруты — ip r."}, {"q": "Зачем нужны права 600 на файле ~/.ssh/id_ed25519?", "a": 3, "o": ["Чтобы ключ можно было запускать как программу", "Чтобы ключ читался всеми пользователями системы", "Это требование файловой системы ext4", "Закрытый ключ должен быть доступен только владельцу, иначе ssh откажется его использовать"], "e": "600 — это rw-------. Если ключ доступен группе или остальным, клиент ssh считает его скомпрометированным и не подключается."}], i=0, got=Q.map(function(){return -1});
+  function score(){ return got.filter(function(g,k){return g===Q[k].a}).length; }
+  function render(){
+    var q=Q[i]; $('#qz-n').textContent=(i+1)+' / '+Q.length; $('#qz-q').textContent=q.q;
+    var o=$('#qz-o'); o.innerHTML=''; var e=$('#qz-e'); e.textContent=''; e.className='tres';
+    q.o.forEach(function(t,k){
+      var b=document.createElement('button'); b.type='button'; b.className='opt'; b.textContent=t;
+      b.onclick=function(){ if(got[i]<0) got[i]=k; show(); };
+      o.appendChild(b);
+    });
+    if(got[i]>=0) show();
+    $('#qz-sc').textContent='верно: '+score();
+    $('#qz-pv').disabled=i===0; $('#qz-nx').textContent=i===Q.length-1?'Начать заново':'Следующий вопрос';
+  }
+  function show(){
+    var q=Q[i], bs=$$('.opt',$('#qz-o'));
+    bs[q.a].classList.add('ok'); if(got[i]!==q.a) bs[got[i]].classList.add('no');
+    var e=$('#qz-e'); e.textContent=(got[i]===q.a?'Верно. ':'Неверно. ')+q.e; e.className='tres '+(got[i]===q.a?'ok':'no');
+    $('#qz-sc').textContent='верно: '+score();
+  }
+  $('#qz-nx').onclick=function(){ if(i===Q.length-1){ got=Q.map(function(){return -1}); i=0; } else i++; render(); };
+  $('#qz-pv').onclick=function(){ if(i>0){ i--; render(); } };
+  render();
+})();
+var h=parseInt((location.hash||'').slice(1),10);
+go(h>=1&&h<=N?h-1:0);
+if(RM.addEventListener) RM.addEventListener('change',function(){ go(cur,true); });
+})();
+</script></body></html>
