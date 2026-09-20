@@ -121,6 +121,97 @@ MARK = {
     "deepin": _svg('<circle cx="12" cy="12" r="8.2"/><path d="M12 6.2A5.8 5.8 0 0 1 12 17.8"/>'),
 }
 
+_RC = [0]
+
+def raccoon(cls="mascot"):
+    """Енот — талисман лекции. Рисуется вектором, внешних файлов не требует."""
+    _RC[0] += 1
+    cid = f"rtail{_RC[0]}"
+    return (
+        f'<svg class="{cls}" viewBox="0 0 200 250" aria-hidden="true">'
+        f'<defs><clipPath id="{cid}">'
+        '<path d="M138 206C180 202 196 156 184 122c-8-24-36-30-44-10-7 18 12 28 16 46 4 20-10 34-26 36z"/>'
+        '</clipPath></defs>'
+        # хвост
+        '<path d="M138 206C180 202 196 156 184 122c-8-24-36-30-44-10-7 18 12 28 16 46 4 20-10 34-26 36z"'
+        ' fill="#8c8279"/>'
+        f'<g clip-path="url(#{cid})" fill="#2e2a27">'
+        '<rect x="118" y="104" width="96" height="15" transform="rotate(-16 166 112)"/>'
+        '<rect x="118" y="136" width="96" height="15" transform="rotate(-10 166 144)"/>'
+        '<rect x="112" y="170" width="96" height="15" transform="rotate(-2 160 178)"/>'
+        '</g>'
+        # тело
+        '<ellipse cx="100" cy="180" rx="54" ry="52" fill="#8c8279"/>'
+        '<ellipse cx="100" cy="188" rx="35" ry="38" fill="#cfc7bd"/>'
+        # лапы
+        '<ellipse cx="72" cy="222" rx="17" ry="11" fill="#2e2a27"/>'
+        '<ellipse cx="128" cy="222" rx="17" ry="11" fill="#2e2a27"/>'
+        '<ellipse cx="56" cy="180" rx="13" ry="20" fill="#6f665e" transform="rotate(14 56 180)"/>'
+        '<ellipse cx="144" cy="180" rx="13" ry="20" fill="#6f665e" transform="rotate(-14 144 180)"/>'
+        # уши
+        '<path d="M48 56 40 14 80 34z" fill="#8c8279"/><path d="M52 52 47 25 72 37z" fill="#c9713a"/>'
+        '<path d="M152 56 160 14 120 34z" fill="#8c8279"/><path d="M148 52 153 25 128 37z" fill="#c9713a"/>'
+        # голова
+        '<ellipse cx="100" cy="86" rx="58" ry="50" fill="#968c83"/>'
+        # светлая полоса на лбу
+        '<path d="M100 38c9 17 9 35 0 56-9-21-9-39 0-56z" fill="#efe9e1"/>'
+        # маска
+        '<path d="M62 70c16-9 34-1 30 18-4 17-26 19-34 7-6-10-4-21 4-25z" fill="#2e2a27"/>'
+        '<path d="M138 70c-16-9-34-1-30 18 4 17 26 19 34 7 6-10 4-21-4-25z" fill="#2e2a27"/>'
+        # глаза
+        '<ellipse cx="77" cy="84" rx="10" ry="11" fill="#efe9e1"/>'
+        '<ellipse cx="123" cy="84" rx="10" ry="11" fill="#efe9e1"/>'
+        '<circle cx="79" cy="85" r="5.5" fill="#1a1715"/><circle cx="121" cy="85" r="5.5" fill="#1a1715"/>'
+        '<circle cx="81" cy="82.5" r="1.8" fill="#fff"/><circle cx="123" cy="82.5" r="1.8" fill="#fff"/>'
+        # морда
+        '<ellipse cx="100" cy="110" rx="27" ry="21" fill="#efe9e1"/>'
+        '<path d="M100 100c7 0 11 4 11 8s-5 7-11 7-11-3-11-7 4-8 11-8z" fill="#2e2a27"/>'
+        '<path d="M100 115v7" stroke="#2e2a27" stroke-width="2.4" stroke-linecap="round"/>'
+        '<path d="M100 122c-4 5-11 4-13-1M100 122c4 5 11 4 13-1" fill="none" stroke="#2e2a27"'
+        ' stroke-width="2.4" stroke-linecap="round"/>'
+        '</svg>')
+
+_RC = [0]
+
+def raccoon(cls="mascot"):
+    """Енот — талисман лекции. Рисуется вектором, внешних файлов не требует."""
+    _RC[0] += 1
+    cid = f"rtail{_RC[0]}"
+    return (
+        f'<svg class="{cls}" viewBox="0 0 200 250" aria-hidden="true">'
+        f'<defs><clipPath id="{cid}">'
+        '<path d="M138 206C180 202 196 156 184 122c-8-24-36-30-44-10-7 18 12 28 16 46 4 20-10 34-26 36z"/>'
+        '</clipPath></defs>'
+        '<path d="M138 206C180 202 196 156 184 122c-8-24-36-30-44-10-7 18 12 28 16 46 4 20-10 34-26 36z"'
+        ' fill="#8c8279"/>'
+        f'<g clip-path="url(#{cid})" fill="#2e2a27">'
+        '<rect x="118" y="104" width="96" height="15" transform="rotate(-16 166 112)"/>'
+        '<rect x="118" y="136" width="96" height="15" transform="rotate(-10 166 144)"/>'
+        '<rect x="112" y="170" width="96" height="15" transform="rotate(-2 160 178)"/>'
+        '</g>'
+        '<ellipse cx="100" cy="180" rx="54" ry="52" fill="#8c8279"/>'
+        '<ellipse cx="100" cy="188" rx="35" ry="38" fill="#cfc7bd"/>'
+        '<ellipse cx="72" cy="222" rx="17" ry="11" fill="#2e2a27"/>'
+        '<ellipse cx="128" cy="222" rx="17" ry="11" fill="#2e2a27"/>'
+        '<ellipse cx="56" cy="180" rx="13" ry="20" fill="#6f665e" transform="rotate(14 56 180)"/>'
+        '<ellipse cx="144" cy="180" rx="13" ry="20" fill="#6f665e" transform="rotate(-14 144 180)"/>'
+        '<path d="M48 56 40 14 80 34z" fill="#8c8279"/><path d="M52 52 47 25 72 37z" fill="#c9713a"/>'
+        '<path d="M152 56 160 14 120 34z" fill="#8c8279"/><path d="M148 52 153 25 128 37z" fill="#c9713a"/>'
+        '<ellipse cx="100" cy="86" rx="58" ry="50" fill="#968c83"/>'
+        '<path d="M100 38c9 17 9 35 0 56-9-21-9-39 0-56z" fill="#efe9e1"/>'
+        '<path d="M62 70c16-9 34-1 30 18-4 17-26 19-34 7-6-10-4-21 4-25z" fill="#2e2a27"/>'
+        '<path d="M138 70c-16-9-34-1-30 18 4 17 26 19 34 7 6-10 4-21-4-25z" fill="#2e2a27"/>'
+        '<ellipse cx="77" cy="84" rx="10" ry="11" fill="#efe9e1"/>'
+        '<ellipse cx="123" cy="84" rx="10" ry="11" fill="#efe9e1"/>'
+        '<circle cx="79" cy="85" r="5.5" fill="#1a1715"/><circle cx="121" cy="85" r="5.5" fill="#1a1715"/>'
+        '<circle cx="81" cy="82.5" r="1.8" fill="#fff"/><circle cx="123" cy="82.5" r="1.8" fill="#fff"/>'
+        '<ellipse cx="100" cy="110" rx="27" ry="21" fill="#efe9e1"/>'
+        '<path d="M100 100c7 0 11 4 11 8s-5 7-11 7-11-3-11-7 4-8 11-8z" fill="#2e2a27"/>'
+        '<path d="M100 115v7" stroke="#2e2a27" stroke-width="2.4" stroke-linecap="round"/>'
+        '<path d="M100 122c-4 5-11 4-13-1M100 122c4 5 11 4 13-1" fill="none" stroke="#2e2a27"'
+        ' stroke-width="2.4" stroke-linecap="round"/>'
+        '</svg>')
+
 # ---------------------------------------------------------------- слайды
 S = []
 
@@ -186,7 +277,7 @@ slide("Титул", """
     <span class="tchip">команды терминала</span>
     <span class="tchip">права доступа</span>
   </div>
-</div>""", "tslide")
+</div>""" + raccoon(), "tslide")
 
 # ---- 02 --------------------------------------------------------------------
 slide("Применение Linux",
@@ -1241,7 +1332,7 @@ slide("Тренажёр",
   </div>
   <div class="vstack">
     <div class="card flat">
-      <h3>Задания</h3>
+      <div class="taskhead">""" + raccoon("rmini") + """<h3>Задания</h3></div>
       <div class="tasks"></div>
       <button class="btn sreset" type="button" style="margin-top:.9rem">Сбросить</button>
     </div>
@@ -1332,7 +1423,7 @@ CSS = r"""
   --orange-2:#ffb35c;
   --ember:#e2560f;
   --ink:#f4f1ec;
-  --dim:#9b9691;
+  --dim:#b3aea8;
   --term-bg:#0d0f12;
   --term-blue:#5aa9e6;
   --term-green:#7fd66f;
@@ -1405,7 +1496,7 @@ p{font-size:1rem;line-height:1.55}
 .nbig{font-family:var(--mono);font-weight:900;color:var(--orange);font-size:clamp(28px,2.7vw,46px);line-height:1;letter-spacing:-.04em}
 .chead{display:flex;align-items:center;gap:.8rem;margin-bottom:.7rem}
 .chead .t{font-size:1.15rem;font-weight:800}
-.cbody{color:var(--dim);font-size:.96rem;line-height:1.55}
+.cbody{color:#dcd7d1;font-size:1rem;line-height:1.6}
 .cbody b{color:var(--ink);font-weight:600}
 .tag{display:inline-flex;align-self:flex-start;align-items:center;gap:.5em;border:1px solid var(--edge);border-radius:8px;
   padding:.4em .7em;font-size:.82rem;color:var(--orange-2);margin-top:auto;margin-block-start:.9rem}
@@ -1415,7 +1506,7 @@ p{font-size:1rem;line-height:1.55}
 .circ{display:inline-grid;place-items:center;width:2em;height:2em;flex:none;border:1px solid var(--orange);border-radius:50%;
   background:transparent;color:var(--orange);font-family:var(--mono);font-weight:700;font-size:.9rem}
 .steps{display:flex;flex-direction:column;gap:.9rem}
-.steps li{display:flex;gap:.9rem;align-items:flex-start;list-style:none;font-size:1rem;line-height:1.55;color:var(--dim)}
+.steps li{display:flex;gap:.9rem;align-items:flex-start;list-style:none;font-size:1rem;line-height:1.6;color:#dcd7d1}
 .steps li b{color:var(--ink)}
 .steprow{display:grid;gap:clamp(12px,1.2vw,18px);grid-template-columns:minmax(0,1fr)}
 /* ------------------------------------------------ терминал */
@@ -1449,7 +1540,7 @@ p{font-size:1rem;line-height:1.55}
 .info .ic{flex:none;display:grid;place-items:center;width:1.7rem;height:1.7rem;border-radius:50%;background:var(--orange);color:#0a0a0c;
   font-weight:900;font-size:.95rem;font-family:var(--f)}
 .info .ic.q{font-family:Georgia,"Times New Roman",serif;font-size:1.25rem;line-height:1;padding-top:.28em}
-.info p{color:var(--dim);font-size:.96rem;line-height:1.55}
+.info p{color:#dcd7d1;font-size:1rem;line-height:1.6}
 .info p b,.info p .mono{color:var(--orange)}
 .info.quote p{color:var(--ink);font-style:italic}
 /* ------------------------------------------------ синтаксис */
@@ -1475,7 +1566,7 @@ p{font-size:1rem;line-height:1.55}
 .cols{font-family:var(--mono);font-size:clamp(13px,1.15vw,19px);white-space:pre;overflow-x:auto;padding:.9rem 1rem;background:var(--term-bg);border-radius:8px;border:1px solid rgba(255,255,255,.08)}
 .cols span{padding:.12em .18em;border-radius:4px;transition:background .25s var(--ez),color .25s var(--ez)}
 .cols span.hot{background:rgba(255,138,20,.25);color:var(--orange-2)}
-.exps{margin-top:.9rem;min-height:4.2rem}
+.exps{margin-top:.9rem;min-height:4.2rem;font-size:1rem;line-height:1.55}
 .exp{display:none}
 .exp.on{display:block}
 .exp .n{color:var(--orange);font-family:var(--mono);font-weight:700;margin-right:.5em}
@@ -1499,7 +1590,7 @@ p{font-size:1rem;line-height:1.55}
 .pick.off{opacity:.3;filter:grayscale(.7)}
 .mini{padding:.75rem .85rem}
 .mini .t{font-size:.98rem;font-weight:800}
-.mini .cbody{font-size:.86rem}
+.mini .cbody{font-size:.9rem}
 /* ------------------------------------------------ тренажёр */
 .trainer{display:grid;gap:clamp(12px,1.4vw,20px);grid-template-columns:minmax(0,1fr)}
 .tw{background:var(--term-bg);border:1px solid rgba(255,255,255,.08);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;min-height:26rem}
@@ -1511,7 +1602,7 @@ p{font-size:1rem;line-height:1.55}
 .tasks{display:flex;flex-direction:column;gap:.7rem}
 .task{display:flex;gap:.7rem;align-items:flex-start;border:1px solid var(--edge);border-radius:10px;padding:.7rem .85rem;background:var(--panel);transition:.25s}
 .task .mk{flex:none;width:1.4rem;height:1.4rem;border:1px solid var(--edge);border-radius:50%;display:grid;place-items:center;font-size:.8rem;color:var(--dim);font-family:var(--mono)}
-.task p{font-size:.92rem;line-height:1.5;color:var(--dim)}
+.task p{font-size:.96rem;line-height:1.55;color:#dcd7d1}
 .task .mono{color:var(--orange-2)}
 .task.done{border-color:var(--edge-hot)}
 .task.done .mk{background:var(--orange);border-color:var(--orange);color:#0a0a0c}
@@ -1524,7 +1615,7 @@ p{font-size:1rem;line-height:1.55}
 .opts .opt{text-align:left;padding:.65em .9em;font-size:.96rem}
 .opts .opt.ok{border-color:var(--edge-hot);background:rgba(255,138,20,.2);color:var(--orange)}
 .opts .opt.no{border-color:rgba(255,95,87,.6);background:rgba(255,95,87,.14);color:#ffb3ad}
-.qexp{min-height:3.2rem;margin-top:.8rem;color:var(--dim);font-size:.95rem;line-height:1.55}
+.qexp{min-height:3.2rem;margin-top:.8rem;color:#dcd7d1;font-size:1rem;line-height:1.6}
 .qexp b{color:var(--orange)}
 .btn{font:inherit;font-size:.9rem;font-weight:600;padding:.5em .95em;border-radius:8px;border:1px solid var(--edge);background:transparent;color:var(--ink);cursor:pointer;transition:.15s}
 .btn:hover{border-color:var(--edge-hot);color:var(--orange-2)}
@@ -1627,7 +1718,7 @@ p{font-size:1rem;line-height:1.55}
 .tbl.dirs td:first-of-type{white-space:nowrap}
 .tbl tbody th{color:var(--ink);font-weight:600;text-align:left}
 .tbl th,.tbl td{text-align:left;padding:.5rem .9rem;border-bottom:1px solid rgba(255,138,20,.14);vertical-align:top}
-.tbl{width:100%;border-collapse:collapse;font-size:.94rem;line-height:1.45}
+.tbl{width:100%;border-collapse:collapse;font-size:.97rem;line-height:1.5}
 .tbl thead th{background:rgba(255,138,20,.1);color:var(--orange);font-size:.82rem;letter-spacing:.06em;
   text-transform:uppercase;font-weight:700;position:sticky;top:0}
 .tbw{overflow:auto;max-height:64vh;align-self:start}
@@ -1636,7 +1727,7 @@ p{font-size:1rem;line-height:1.55}
 .perm9{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;text-align:center}
 .pgrp{border:1px solid var(--edge);border-radius:var(--r);padding:1rem .8rem;background:var(--panel-2)}
 .pch{font-size:clamp(24px,3vw,44px);font-weight:900;color:var(--orange);letter-spacing:.14em}
-.plb{margin-top:.45rem;color:var(--dim);font-size:.85rem}
+.plb{margin-top:.45rem;color:#dcd7d1;font-size:.88rem}
 .steps li b{color:var(--ink)}
 @media (max-width:767px){.perm9{grid-template-columns:1fr;gap:.6rem}.tbw{max-height:none}}
 /* ------------------------------------------------ плотные слайды */
@@ -1644,8 +1735,8 @@ p{font-size:1rem;line-height:1.55}
 .tight .sh{margin-bottom:1rem}
 .tight .card{padding:.85rem 1rem}
 .tight .vstack{gap:.7rem}
-.tight .cbody,.tight .steps li{font-size:.9rem;line-height:1.48}
-.tight .tbl{font-size:.88rem}
+.tight .cbody,.tight .steps li{font-size:.95rem;line-height:1.52}
+.tight .tbl{font-size:.92rem}
 .tight .tbl th,.tight .tbl td{padding:.38rem .8rem}
 .tight .pgrp{padding:.7rem .6rem}
 .tight .pch{font-size:clamp(20px,2.3vw,34px)}
@@ -1653,6 +1744,17 @@ p{font-size:1rem;line-height:1.55}
 .tight h3{font-size:.98rem;margin-bottom:.3rem}
 .tight .plb{font-size:.8rem;margin-top:.3rem}
 .tight .pgrp{padding:.55rem .6rem}
+/* ------------------------------------------------ талисман */
+.mascot{position:absolute;right:clamp(14px,4vw,86px);bottom:clamp(88px,11vh,132px);
+  width:clamp(104px,13vw,232px);height:auto;pointer-events:none;z-index:3;
+  filter:drop-shadow(0 16px 32px rgba(0,0,0,.55))}
+.rmini{width:2.3rem;height:auto;flex:none}
+.taskhead{display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem}
+.taskhead h3{margin:0}
+@media (max-width:767px){.mascot{width:96px;right:8px;bottom:9.5rem;opacity:.85}}
+.tight .perm9{gap:.7rem}
+.tight .pch{font-size:clamp(18px,2vw,30px);letter-spacing:.1em}
+.tight .info p{font-size:.92rem;line-height:1.5}
 """
 
 # ---------------------------------------------------------------- JS
